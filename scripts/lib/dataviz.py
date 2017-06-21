@@ -37,7 +37,6 @@ class DataViz:
         parser.add_argument(
             '-c',
             '--column',
-            dest='field',
             help="print informations given field")
         parser.add_argument(
             '-pc',
@@ -51,6 +50,12 @@ class DataViz:
 
         if args.lines:
             print self.lines()
+
+        if args.fields:
+            print "fields: " + str(self.fields)
+
+        if args.column:
+            print self.column(args.column)
 
     def infile_convert (self, file_name, ext):
         if (ext == "csv"):
@@ -68,9 +73,11 @@ class DataViz:
             print "ERROR: invalid format"
 
     def lines (self):
-        return len(self.data)
+        return "lines: " + str(len(self.data))
 
-
+    def column (self, field):
+        for i in self.data:
+            print i[field]
 
 
 
