@@ -1,0 +1,135 @@
+#!/usr/bin/env python
+
+import argparse
+import sys
+import csv
+import os
+from collections import Counter
+
+def csv_to_array (file_name):
+    with open(file_name, "r") as f:
+        reader = csv.DictReader(f)
+        _fields      = reader.fieldnames
+        _data        = list(reader)
+        return _data, _fields
+
+def csv_length ():
+    return len(data)
+
+def print_column (field):
+    for i in data:
+        print i[field]
+
+def print_column_info (field):
+    empty = 0
+    for i in data:
+        if i[field] ==  "":
+            empty += 1
+    print "total: " + str(len(data))
+    print "empty: " + str(empty)
+    print "populated: " + str(len(data) - empty)
+
+def print_sum_of_field (field):
+    count = 0
+    for i in data:
+        try:
+            count += float(i[field])
+        except:
+            pass
+    print "total: " + str(count)
+    print "average: " + str(count / len(data))
+
+def get_array_from_field (field):
+    arr = []
+    for i in data:
+        arr.append(i[field])
+    return arr
+
+def print_occurrence_of_field (field):
+    arr = get_array_from_field(field)
+    temp = Counter(arr)
+    for attr, value in temp.iteritems():
+        print attr, value
+
+def print_occurrence_of_each_field ():
+    for field in fields:
+        arr = get_array_from_field(field)
+        temp = Counter(arr)
+        print field
+        for attr, value in temp.iteritems():
+            print "    ", attr, value
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description="Do crazy stuff with csv files")
+    parser.add_argument('infile')
+    parser.add_argument('-v','--verbose',
+        help="tell me more",
+        action='store_true')
+    parser.add_argument('-l', '--lines',
+        help="display number of lines",
+        action="store_true",
+        default=False)
+    parser.add_argument('-i', '--info',
+        help="display general info",
+        action="store_true",
+        default=False)
+    parser.add_argument('-f', '--field',
+        help="display list of fields",
+        action="store_true",
+        default=False)
+    parser.add_argument('-s', '--sum',
+        help="sum value of given fields")
+    parser.add_argument('-o', '--occurrence',
+        help="display occurrence for given field")
+    parser.add_argument('-O', '--occurrence_each',
+        help="display occurrence for each field",
+        action="store_true",
+        default=False)
+        # filter
+    parser.add_argument('-a', '--asd',
+        help="display asd",
+        action="store_true",
+        default=False)
+    parser.add_argument('-C', '--column',
+        help="print all lines of a given field")
+    parser.add_argument('-c', '--column_info',
+        help="print informations given field")
+    args = parser.parse_args()
+
+data, fields = csv_to_array(args.infile)
+
+if args.lines:
+    print "lines: " + str(csv_length())
+
+if args.info:
+    print "field: " + str(fields)
+    print "lines: " + str(csv_length())
+    print "first element: " + str(data[0])
+
+if args.field:
+    print "fields: " + str(", ".join(fields))
+
+if args.column:
+    print_column(args.column)
+
+if args.column_info:
+    print_column_info(args.column_info)
+
+if args.sum:
+    print_sum_of_field(args.sum)
+
+if args.occurrence:
+    print_occurrence_of_field(args.occurrence)
+
+if args.occurrence_each:
+    print_occurrence_of_each_field()
+
+#
+# parser.add_argument("square", help="display a square of a given number")
+# args = parser.parse_args()
+# print args.square**2
+
+
+# to do
+# nargs="?"

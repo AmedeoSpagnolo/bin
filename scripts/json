@@ -3,7 +3,7 @@ import sys
 sys.path.append(sys.path[0])
 from lib.dataviz import *
 
-description = "Do crazy stuff with csv files"
+description = "Do crazy stuff with json files"
 epilog = "example: ---"
 
-DataViz("csv", description, epilog)
+DataViz("json", description, epilog)
