@@ -40,19 +40,18 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
-            '-uglyjson',
+            '-ugly',
             help="export pretty json",
-            action="store_true",
-            default=False)
+            action="store_false",
+            default=True)
+        parser.add_argument(
+            '-C',
+            '--column',
+            help="print all lines of given field")
         parser.add_argument(
             '-c',
-            '--column',
+            '--columninfo',
             help="print informations given field")
-        parser.add_argument(
-            '-pc',
-            '--printcolumn',
-            dest='field',
-            help="print all lines of a given field")
 
         args = parser.parse_args()
 
@@ -68,10 +67,23 @@ class DataViz:
             print self.column(args.column)
 
         if args.json:
-            self.export_json(args.infile[0], True)
+            self.export_json(args.infile[0], args.ugly)
 
-        if args.uglyjson:
-            self.export_json(args.infile[0], False)
+        if args.info:
+            print "informations"
+
+        if args.columninfo:
+            self.print_column_info(args.columninfo)
+
+    def print_column_info (self, field):
+        empty = 0
+        for i in self.data:
+            if i[field] ==  "":
+                empty += 1
+        print str(field) + ":"
+        print "    total: " + str(len(self.data))
+        print "    empty: " + str(empty)
+        print "    populated: " + str(len(self.data) - empty)
 
     def export_json(self, _infile, beauty=False):
         name = _infile.split(".")[0]

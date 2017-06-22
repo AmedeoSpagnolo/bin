@@ -6,8 +6,10 @@ from lib.dataviz import *
 description = "Do crazy stuff with csv files"
 epilog = '''
 examples:
-    csv file.csv -json # export pretty json
-    csv file.csv -l # print general informations
-    csv file.csv -uglyjson # export ugly json
+    # export json
+    csv infile.csv -json
+    csv infile.csv -json -ugly
+    # general
+    csv file.csv -l # print lines number
 '''
 DataViz("csv", description, epilog)
