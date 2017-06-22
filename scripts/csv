@@ -17,5 +17,7 @@ examples:
     csv example.csv --json
     csv example.csv --json --filter field1 field2 field3
     csv example.csv -c field -o # get info from field with occurrence
+    csv example.csv -c field -a # get info from field with average
+    csv example.csv -c field -oa # get info from field with occurrence and average
 '''
 DataViz("csv", description, epilog)

@@ -42,6 +42,12 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
+            '-a',
+            '--average',
+            help="print list of fields",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--json',
             help="export pretty json",
             action="store_true",
@@ -92,22 +98,26 @@ class DataViz:
             print "informations"
 
         if args.columninfo:
-            self.print_column_info(args.columninfo, args.occurrence)
+            self.print_column_info(args.columninfo, args.occurrence, args.average)
 
         if args.csv:
             self.export_csv(args.infile[0], args.filter)
 
     # def
 
-    def print_column_info (self, field, occurrence):
+    def print_column_info (self, field, occurrence, average):
         empty = 0
         for i in self.data:
             if i[field] ==  "":
                 empty += 1
+        populated = len(self.data) - empty
         print str(field) + ":"
         print "    total: " + str(len(self.data))
         print "    empty: " + str(empty)
-        print "    populated: " + str(len(self.data) - empty)
+        print "    populated: " + str(populated)
+        if average:
+            _average = self.get_average(field, populated)
+            print "    average: " + _average
         if occurrence:
             self.print_occurrence_of_field(field)
 
@@ -123,6 +133,15 @@ class DataViz:
         print "    occurrence:"
         for attr, value in temp.iteritems():
             print "        " + str(attr) + " - " + str(value)
+
+    def get_average (self, field, total):
+        count = 0
+        for i in self.data:
+            try:
+                count += float(i[field])
+            except:
+                pass
+        return str(count / total)
 
     def export_csv (self, _infile, _filters=None):
         name = _infile.split(".")[0]
