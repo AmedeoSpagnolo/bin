@@ -7,9 +7,14 @@ description = "Do crazy stuff with csv files"
 epilog = '''
 examples:
     # export json
-    csv infile.csv -json
-    csv infile.csv -json -ugly
+    csv infile.csv --json
+    csv infile.csv --json -ugly
     # general
     csv file.csv -l # print lines number
+    # export
+    csv example.csv --csv
+    csv example.csv --csv --filter field1 field2 field3
+    csv example.csv --json 
+    csv example.csv --json --filter field1 field2 field3
 '''
 DataViz("csv", description, epilog)
