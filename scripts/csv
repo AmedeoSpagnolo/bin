@@ -16,6 +16,7 @@ examples:
     csv infile.csv --csv --filter field1 field2 field3
     csv infile.csv --json
     csv infile.csv --json --filter field1 field2 field3
+    csv infile.csv --json --add newfield --filters field1 field2
     csv infile.csv -c field -o # get info from field with occurrence
     csv infile.csv -c field -a # get info from field with average
     csv infile.csv -c field -oa # get info from field with occurrence and average

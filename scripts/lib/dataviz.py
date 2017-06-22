@@ -66,6 +66,12 @@ class DataViz:
             default=False,
             required=False)
         parser.add_argument(
+            '--add',
+            help="with --csv or --json export add fields",
+            nargs="+",
+            default=False,
+            required=False)
+        parser.add_argument(
             '--ugly',
             help="with --json export without beautify",
             action="store_false",
@@ -93,7 +99,7 @@ class DataViz:
             print self.column(args.column)
 
         if args.json:
-            self.export_json(args.infile[0], args.ugly, args.filter)
+            self.export_json(args.infile[0], args.ugly, args.filter, args.add)
 
         if args.info:
             print "first element: " + str(self.data[0])
@@ -105,8 +111,6 @@ class DataViz:
 
         if args.csv:
             self.export_csv(args.infile[0], args.filter)
-
-    # def
 
     def print_column_info (self, field, occurrence, average):
         empty = 0
@@ -146,42 +150,48 @@ class DataViz:
                 pass
         return str(count / total)
 
-    def export_csv (self, _infile, _filters=None):
+    def export_csv (self, _infile, _filters=None, _add=None):
         name = _infile.split(".")[0]
         _filters = self.fields if _filters < 1 else _filters
+        if _add:
+            _filters += _add
         with open(str(name) + '_converted.csv', 'w') as f:
             f.write(",".join(_filters) + "\n")
             for i in self.data:
                 line = []
                 for j in _filters:
-                    line.append(i[j])
+                    try:
+                        line.append(i[j])
+                    except:
+                        line.append("")
                 f.write(",".join(line) + "\n")
 
-    def filter_json_obj (self,dataset, filters):
+    def filter_json_obj (self,dataset, filters, add):
         print "filters"
         print filters
         if filters:
             temp = []
             for i in dataset:
                 _obj = {}
+                for y in add:
+                    _obj[y] = ""
                 for j in filters:
                     _obj[j] = i[j]
-                # print _obj
                 temp.append(_obj)
             return temp
         else:
             return dataset
 
-    def export_json (self, _infile, beauty=False, _filters=None):
+    def export_json (self, _infile, beauty=False, _filters=None, _add=None):
         _filters = self.fields if _filters < 1 else _filters
         name = _infile.split(".")[0]
         if beauty:
             with open(str(name) + '_converted.json', 'w') as f:
-                json.dump(self.filter_json_obj(self.data,_filters), f, sort_keys=True, indent=4)
+                json.dump(self.filter_json_obj(self.data,_filters,_add), f, sort_keys=True, indent=4)
                 print "new file: " + str(name) + "_converted.json saved!"
         else:
             with open(str(name) + '_ugly_converted.json', 'w') as f:
-                json.dump(self.filter_json_obj(self.data,_filters), f)
+                json.dump(self.filter_json_obj(self.data,_filters,_add), f)
                 print "new file: " + str(name) + "_ugly_converted.json saved!"
 
     def infile_convert (self, file_name, ext):
