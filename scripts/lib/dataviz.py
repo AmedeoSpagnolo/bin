@@ -2,6 +2,7 @@
 import argparse
 import json
 import csv
+from collections import Counter
 
 class DataViz:
     def __init__(self, dataset_format = "", description = "", epilog = ""):
@@ -35,6 +36,12 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
+            '-o',
+            '--occurrence',
+            help="print list of fields",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--json',
             help="export pretty json",
             action="store_true",
@@ -52,7 +59,7 @@ class DataViz:
             default=False,
             required=False)
         parser.add_argument(
-            '-ugly',
+            '--ugly',
             help="export pretty json",
             action="store_false",
             default=True)
@@ -85,12 +92,14 @@ class DataViz:
             print "informations"
 
         if args.columninfo:
-            self.print_column_info(args.columninfo)
+            self.print_column_info(args.columninfo, args.occurrence)
 
         if args.csv:
             self.export_csv(args.infile[0], args.filter)
 
-    def print_column_info (self, field):
+    # def
+
+    def print_column_info (self, field, occurrence):
         empty = 0
         for i in self.data:
             if i[field] ==  "":
@@ -99,6 +108,21 @@ class DataViz:
         print "    total: " + str(len(self.data))
         print "    empty: " + str(empty)
         print "    populated: " + str(len(self.data) - empty)
+        if occurrence:
+            self.print_occurrence_of_field(field)
+
+    def get_array_from_field (self, field):
+        arr = []
+        for i in self.data:
+            arr.append(i[field])
+        return arr
+
+    def print_occurrence_of_field (self, field):
+        arr = self.get_array_from_field(field)
+        temp = Counter(arr)
+        print "    occurrence:"
+        for attr, value in temp.iteritems():
+            print "        " + str(attr) + " - " + str(value)
 
     def export_csv (self, _infile, _filters=None):
         name = _infile.split(".")[0]

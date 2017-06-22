@@ -14,7 +14,8 @@ examples:
     # export
     csv example.csv --csv
     csv example.csv --csv --filter field1 field2 field3
-    csv example.csv --json 
+    csv example.csv --json
     csv example.csv --json --filter field1 field2 field3
+    csv example.csv -c field -o # get info from field with occurrence
 '''
 DataViz("csv", description, epilog)
