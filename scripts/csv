@@ -4,7 +4,7 @@ sys.path.append(sys.path[0])
 from lib.dataviz import *
 
 description = "Do crazy stuff with csv files"
-epilog = '''
+epilog ="""
 examples:
     # export json
     csv infile.csv --json
@@ -12,12 +12,13 @@ examples:
     # general
     csv file.csv -l # print lines number
     # export
-    csv example.csv --csv
-    csv example.csv --csv --filter field1 field2 field3
-    csv example.csv --json
-    csv example.csv --json --filter field1 field2 field3
-    csv example.csv -c field -o # get info from field with occurrence
-    csv example.csv -c field -a # get info from field with average
-    csv example.csv -c field -oa # get info from field with occurrence and average
-'''
+    csv infile.csv --csv
+    csv infile.csv --csv --filter field1 field2 field3
+    csv infile.csv --json
+    csv infile.csv --json --filter field1 field2 field3
+    csv infile.csv -c field -o # get info from field with occurrence
+    csv infile.csv -c field -a # get info from field with average
+    csv infile.csv -c field -oa # get info from field with occurrence and average
+"""
+
 DataViz("csv", description, epilog)
