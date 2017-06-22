@@ -95,7 +95,9 @@ class DataViz:
             self.export_json(args.infile[0], args.ugly, args.filter)
 
         if args.info:
-            print "informations"
+            print "first element: " + str(self.data[0])
+            print "fields: " + str(self.fields)
+            print "lines: " + str(len(self.data))
 
         if args.columninfo:
             self.print_column_info(args.columninfo, args.occurrence, args.average)
