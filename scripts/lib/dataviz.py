@@ -11,6 +11,7 @@ class DataViz:
             description=description,
             epilog=epilog)
         parser.add_argument(
+            '-v',
             '--version',
             action='version',
             version='%(prog)s 1.0')
@@ -38,13 +39,13 @@ class DataViz:
         parser.add_argument(
             '-o',
             '--occurrence',
-            help="print list of fields",
+            help="with -c get occurrence",
             action="store_true",
             default=False)
         parser.add_argument(
             '-a',
             '--average',
-            help="print list of fields",
+            help="with -c get average",
             action="store_true",
             default=False)
         parser.add_argument(
@@ -60,13 +61,13 @@ class DataViz:
         parser.add_argument(
             '--filter',
             '--filters',
-            help="export pretty json",
+            help="with --csv or --json export only given fields",
             nargs="+",
             default=False,
             required=False)
         parser.add_argument(
             '--ugly',
-            help="export pretty json",
+            help="with --json export without beautify",
             action="store_false",
             default=True)
         parser.add_argument(
