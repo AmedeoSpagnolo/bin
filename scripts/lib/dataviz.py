@@ -35,6 +35,16 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
+            '-json',
+            help="export pretty json",
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '-uglyjson',
+            help="export pretty json",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '-c',
             '--column',
             help="print informations given field")
@@ -56,6 +66,23 @@ class DataViz:
 
         if args.column:
             print self.column(args.column)
+
+        if args.json:
+            self.export_json(args.infile[0], True)
+
+        if args.uglyjson:
+            self.export_json(args.infile[0], False)
+
+    def export_json(self, _infile, beauty=False):
+        name = _infile.split(".")[0]
+        if beauty:
+            with open(str(name) + '_converted.json', 'w') as f:
+                json.dump(self.data, f, sort_keys=True, indent=4)
+                print "new file: " + str(name) + "_converted.json saved!"
+        else:
+            with open(str(name) + '_ugly_converted.json', 'w') as f:
+                json.dump(self.data, f)
+                print "new file: " + str(name) + "_ugly_converted.json saved!"
 
     def infile_convert (self, file_name, ext):
         if (ext == "csv"):

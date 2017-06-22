@@ -4,6 +4,10 @@ sys.path.append(sys.path[0])
 from lib.dataviz import *
 
 description = "Do crazy stuff with csv files"
-epilog = "example: ---"
-
+epilog = '''
+examples:
+    csv file.csv -json # export pretty json
+    csv file.csv -l # print general informations
+    csv file.csv -uglyjson # export ugly json
+'''
 DataViz("csv", description, epilog)
