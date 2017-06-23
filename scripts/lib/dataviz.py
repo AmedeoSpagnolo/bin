@@ -25,6 +25,7 @@ class DataViz:
         {dataset_format} infile.{dataset_format} --json
         {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3
         {dataset_format} infile.{dataset_format} --json --add newfield --filters field1 field2
+    # info column
         {dataset_format} infile.{dataset_format} -c field -o # get info from field with occurrence
         {dataset_format} infile.{dataset_format} + -c field -a # get info from field with average
         {dataset_format} infile.{dataset_format} -c field -oa # get info from field with occurrence and average""".replace("{dataset_format}",dataset_format),
@@ -112,7 +113,7 @@ class DataViz:
             print self.lines()
 
         if args.fields:
-            print "fields: " + str(self.fields)
+            print "fields: " + str(json.dumps(self.fields))
 
         if args.column:
             print self.column(args.column)
@@ -121,9 +122,9 @@ class DataViz:
             self.export_json(args.infile[0], args.ugly, args.filter, args.add)
 
         if args.info:
-            print "first element: " + str(self.data[0])
-            print "fields: " + str(self.fields)
-            print "lines: " + str(len(self.data))
+            print "first element: " + str(json.dumps(self.data[0]))
+            print "fields: " + str(json.dumps(self.fields))
+            print "lines: " + str(len(json.dumps(self.data)))
 
         if args.columninfo:
             self.print_column_info(args.columninfo, args.occurrence, args.average)
@@ -169,7 +170,7 @@ class DataViz:
                 pass
         return str(count / total)
 
-    def export_csv (self, _infile, _filters=None, _add=None):
+    def export_csv (self, _infile, _filters=None, _add=[]):
         name = _infile.split(".")[0]
         _filters = self.fields if _filters < 1 else _filters
         _add = _add if _add else []
