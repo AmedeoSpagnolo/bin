@@ -8,7 +8,7 @@ class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescri
     pass
 
 class DataViz:
-    def __init__(self, dataset_format = "", description = "", epilog = ""):
+    def __init__(self, dataset_format = ""):
         parser = argparse.ArgumentParser(
             add_help=True,
             description="Do crazy stuff with csv files",

@@ -2,8 +2,4 @@
 import sys
 sys.path.append(sys.path[0])
 from lib.dataviz import *
-
-description = "Do crazy stuff with json files"
-epilog = "example: ---"
-
-DataViz("json", description, epilog)
+DataViz("json")
