@@ -4,12 +4,16 @@ import json
 import csv
 from collections import Counter
 
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
+    pass
+
 class DataViz:
     def __init__(self, dataset_format = "", description = "", epilog = ""):
         parser = argparse.ArgumentParser(
             add_help=True,
             description=description,
-            epilog=epilog)
+            epilog=epilog,
+            formatter_class=CustomFormatter)
         parser.add_argument(
             '-v',
             '--version',
@@ -166,9 +170,7 @@ class DataViz:
                         line.append("")
                 f.write(",".join(line) + "\n")
 
-    def filter_json_obj (self,dataset, filters, add):
-        print "filters"
-        print filters
+    def filter_json_obj (self, dataset, filters, add):
         if filters:
             temp = []
             for i in dataset:
@@ -182,8 +184,9 @@ class DataViz:
         else:
             return dataset
 
-    def export_json (self, _infile, beauty=False, _filters=None, _add=None):
+    def export_json (self, _infile, beauty=False, _filters=None, _add=[]):
         _filters = self.fields if _filters < 1 else _filters
+        _add = _add if _add else []
         name = _infile.split(".")[0]
         if beauty:
             with open(str(name) + '_converted.json', 'w') as f:
