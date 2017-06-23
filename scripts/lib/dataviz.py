@@ -11,8 +11,23 @@ class DataViz:
     def __init__(self, dataset_format = "", description = "", epilog = ""):
         parser = argparse.ArgumentParser(
             add_help=True,
-            description=description,
-            epilog=epilog,
+            description="Do crazy stuff with csv files",
+            epilog="""examples:
+    # export json
+        {dataset_format} infile.{dataset_format} --json
+        {dataset_format} infile.{dataset_format} --json -ugly
+    # general
+        {dataset_format} infile.{dataset_format} -i # print general info
+        {dataset_format} infile.{dataset_format} -l # print lines number
+    # export
+        {dataset_format} infile.{dataset_format} --csv
+        {dataset_format} infile.{dataset_format} --csv --filter field1 field2 field3
+        {dataset_format} infile.{dataset_format} --json
+        {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3
+        {dataset_format} infile.{dataset_format} --json --add newfield --filters field1 field2
+        {dataset_format} infile.{dataset_format} -c field -o # get info from field with occurrence
+        {dataset_format} infile.{dataset_format} + -c field -a # get info from field with average
+        {dataset_format} infile.{dataset_format} -c field -oa # get info from field with occurrence and average""".replace("{dataset_format}",dataset_format),
             formatter_class=CustomFormatter)
         parser.add_argument(
             '-v',
@@ -173,19 +188,16 @@ class DataViz:
             print "new file: " + str(name) + "_converted.csv saved!"
 
 
-    def filter_json_obj (self, dataset, filters, add):
-        if filters:
-            temp = []
-            for i in dataset:
-                _obj = {}
-                for y in add:
-                    _obj[y] = ""
-                for j in filters:
-                    _obj[j] = i[j]
-                temp.append(_obj)
-            return temp
-        else:
-            return dataset
+    def filter_json_obj (self,dataset,filters,add):
+        temp = []
+        for i in dataset:
+            _obj = {}
+            for y in add:
+                _obj[y] = ""
+            for j in filters:
+                _obj[j] = i[j]
+            temp.append(_obj)
+        return temp
 
     def export_json (self, _infile, beauty=False, _filters=None, _add=[]):
         _filters = self.fields if _filters < 1 else _filters
