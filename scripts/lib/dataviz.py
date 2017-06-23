@@ -22,9 +22,10 @@ class DataViz:
     # export
         {dataset_format} infile.{dataset_format} --csv
         {dataset_format} infile.{dataset_format} --csv --filter field1 field2 field3
+        {dataset_format} infile.{dataset_format} --csv --filter field1 field2 field3 --add newfield
         {dataset_format} infile.{dataset_format} --json
         {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3
-        {dataset_format} infile.{dataset_format} --json --add newfield --filters field1 field2
+        {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3 --add newfield
     # info column
         {dataset_format} infile.{dataset_format} -c field -o # get info from field with occurrence
         {dataset_format} infile.{dataset_format} + -c field -a # get info from field with average
