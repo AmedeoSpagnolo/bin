@@ -114,7 +114,7 @@ class DataViz:
             self.print_column_info(args.columninfo, args.occurrence, args.average)
 
         if args.csv:
-            self.export_csv(args.infile[0], args.filter)
+            self.export_csv(args.infile[0], args.filter, args.add)
 
     def print_column_info (self, field, occurrence, average):
         empty = 0
@@ -157,10 +157,9 @@ class DataViz:
     def export_csv (self, _infile, _filters=None, _add=None):
         name = _infile.split(".")[0]
         _filters = self.fields if _filters < 1 else _filters
-        if _add:
-            _filters += _add
+        _add = _add if _add else []
         with open(str(name) + '_converted.csv', 'w') as f:
-            f.write(",".join(_filters) + "\n")
+            f.write(",".join(_filters+_add) + "\n")
             for i in self.data:
                 line = []
                 for j in _filters:
@@ -168,7 +167,11 @@ class DataViz:
                         line.append(i[j])
                     except:
                         line.append("")
+                for r in _add:
+                    line.append("")
                 f.write(",".join(line) + "\n")
+            print "new file: " + str(name) + "_converted.csv saved!"
+
 
     def filter_json_obj (self, dataset, filters, add):
         if filters:
