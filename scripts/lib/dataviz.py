@@ -114,7 +114,7 @@ class DataViz:
             print self.lines()
 
         if args.fields:
-            print "fields: " + str(json.dumps(self.fields))
+            print str(len(self.fields)) + " fields: " + str(json.dumps(self.fields))
 
         if args.column:
             print self.column(args.column)
