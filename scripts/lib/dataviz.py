@@ -223,13 +223,13 @@ class DataViz:
     def export_json (self):
         name = self.args.infile[0].split(".")[0]
         if self.args.pretty:
-            with open(str(name) + '_pretty_converted.json', 'w') as f:
-                json.dump(self.data, f)
-                print "new file: " + str(name) + "_pretty_converted.json saved!"
-        else:
             with open(str(name) + '_converted.json', 'w') as f:
-                json.dump(self.data, f, sort_keys=True, indent=4)
+                json.dump(self.data, f)
                 print "new file: " + str(name) + "_converted.json saved!"
+        else:
+            with open(str(name) + '_pretty_converted.json', 'w') as f:
+                json.dump(self.data, f, sort_keys=True, indent=4)
+                print "new file: " + str(name) + "_pretty_converted.json saved!"
 
     def infile_convert (self, file_name, ext):
         with open(file_name, "r") as f:
