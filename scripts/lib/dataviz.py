@@ -200,9 +200,8 @@ class DataViz:
                 except:
                     pass
         valid = len(self.data)-empty
-        if valid != 0:
-            average = count/valid
-        return empty,valid,len(self.data),count,count/valid
+        average = count/valid if valid != 0 else None
+        return empty,valid,len(self.data),count,average
 
     def get_array_from_field (self, field):
         arr = []
