@@ -3,6 +3,7 @@ import argparse
 import json
 import csv
 from collections import Counter
+from urllib2 import Request, urlopen, URLError
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
@@ -112,6 +113,9 @@ class DataViz:
             '--columninfo',
             nargs="+",
             help="print informations given field")
+        parser.add_argument(
+            '--gps',
+            help="convert addresses in gps location if valid from given column")
 
         self.args = parser.parse_args()
         self.data, self.fields = self.infile_convert(self.args.infile[0], dataset_format)
@@ -165,6 +169,41 @@ class DataViz:
 
         if self.args.csv:
             self.export_csv()
+
+        if self.args.gps:
+            self.field_to_gps()
+
+    def getHtml (self,url):
+       request = Request(url)
+       error = 'Got an error code'
+       try:
+           response = urlopen(request)
+           _resp = response.read()
+           return _resp
+       except URLError, e:
+           print 'Got an error code:', e
+           return '{"status": "error", "results", "none"}'
+
+    def field_to_gps (self):
+        fname = self.args.infile[0].split(".")[0]
+        key = "AIzaSyACjZxwJS2CEC5TrNmY1WWbEgEKX-bG3uQ"
+        url = "https://maps.googleapis.com/maps/api/geocode/json"
+        for i in self.data:
+                name = i[self.args.gps]
+                api = url + "?address=" + name.replace(" ","+") + "&key=" + key
+                try:
+                    temp = json.loads(self.getHtml(api))
+                    lng = temp['results'][0]['geometry']['location']['lng']
+                    lat = temp['results'][0]['geometry']['location']['lat']
+                    print lng,lat
+                    with open(str(fname) + '_gps.json', 'a') as f:
+                        newline = "[%s,%s],\n" % (lng,lat)
+                        f.write(newline)
+                        f.close()
+                except:
+                    pass
+        print "new file: " + str(name) + "_gps.json saved!"
+
 
 
     def add_field (self):
