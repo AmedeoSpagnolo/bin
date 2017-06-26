@@ -15,7 +15,7 @@ class DataViz:
             epilog="""examples:
     # export json
         {dataset_format} infile.{dataset_format} --json
-        {dataset_format} infile.{dataset_format} --json -ugly
+        {dataset_format} infile.{dataset_format} --json --pretty
     # general
         {dataset_format} infile.{dataset_format} -i # print general info
         {dataset_format} infile.{dataset_format} -l # print lines number
@@ -98,8 +98,8 @@ class DataViz:
             default=False,
             required=False)
         parser.add_argument(
-            '--ugly',
-            help="with --json export without beautify",
+            '--pretty',
+            help="with --json beautify and export",
             action="store_false",
             default=True)
         parser.add_argument(
@@ -222,10 +222,10 @@ class DataViz:
 
     def export_json (self):
         name = self.args.infile[0].split(".")[0]
-        if self.args.ugly:
-            with open(str(name) + '_ugly_converted.json', 'w') as f:
+        if self.args.pretty:
+            with open(str(name) + '_pretty_converted.json', 'w') as f:
                 json.dump(self.data, f)
-                print "new file: " + str(name) + "_ugly_converted.json saved!"
+                print "new file: " + str(name) + "_pretty_converted.json saved!"
         else:
             with open(str(name) + '_converted.json', 'w') as f:
                 json.dump(self.data, f, sort_keys=True, indent=4)
