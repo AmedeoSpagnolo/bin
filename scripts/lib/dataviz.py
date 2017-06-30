@@ -251,12 +251,12 @@ class DataViz:
     def export_csv (self):
         name = self.args.infile[0].split(".")[0]
         with open(str(name) + '_converted.csv', 'w') as f:
-            f.write(",".join(self.fields) + "\n")
+            f.write(",".join(['"'+str(x)+'"' for x in self.fields]) + "\n")
             for i in self.data:
                 line = []
                 for j in self.fields:
                     line.append(i[j])
-                f.write(",".join(line) + "\n")
+                f.write(",".join(['"'+str(y)+'"' for y in line]) + "\n")
             print "new file: " + str(name) + "_converted.csv saved!"
 
     def export_json (self):

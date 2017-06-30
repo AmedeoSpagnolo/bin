@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+# for f in *.png; do resize $f --max 20 20; done
+
+
+import argparse
+import sys
+import os
+from PIL import Image
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('infile')
+    parser.add_argument(
+        '-H',
+        '--height')
+    parser.add_argument(
+        '-W',
+        '--width')
+    parser.add_argument(
+        '--max',
+        nargs="+",
+        required=False)
+    parser.add_argument(
+        '--wide',
+        help="print list of fields")
+    parser.add_argument(
+        '--handy',
+        help="print list of fields",
+        action="store_true",
+        default=False)
+    args = parser.parse_args()
+
+def resize_by_width(_w):
+    file_name, file_extension = os.path.splitext(args.infile)
+    outfile = file_name + "_%sx" % (_w) + file_extension
+    command = "convert %s'[%sx]' %s" % (args.infile,_w,outfile)
+    os.system(command)
+    print("image resized: " + outfile)
+
+def resize_by_height(_h):
+    file_name, file_extension = os.path.splitext(args.infile)
+    outfile = file_name + "_x%s" % (_h) + file_extension
+    command = "convert %s'[x%s]' %s" % (args.infile,_h,outfile)
+    os.system(command)
+    print("image resized: " + outfile)
+
+def calc_new_size (orig_w, orig_h, max_w, max_h):
+    new_w = int(orig_w)
+    new_h = int(orig_h)
+    if max_w > orig_w:
+        new_w = int(max_w)
+    if max_h > orig_h:
+        new_h = int(max_h)
+    return (new_w, new_h, new_h/new_w)
+
+def add_margin(margin):
+    file_name, file_extension = os.path.splitext(args.infile)
+    outfile = file_name + "_border" + file_extension
+    command = "convert %s -bordercolor none -border %s %s" % (args.infile,margin,outfile)
+    os.system(command)
+    print("border added: " + outfile)
+
+def handy_logo(margin):
+    file_name, file_extension = os.path.splitext(args.infile)
+    outfile = file_name + "_handy" + file_extension
+    command = "convert %s -resize 230x100 -bordercolor none -border %s -resize 230x100 %s" % (args.infile,margin,outfile)
+    os.system(command)
+    print("border added: " + outfile)
+
+
+im=Image.open(args.infile)
+w, h = im.size
+w = int(w)
+h = int(h)
+r = h / w
+
+if args.height:
+    resize_by_height(args.height)
+
+if args.width:
+    resize_by_width(args.width)
+
+if args.max and len(args.max) == 2:
+    neww, newh, newr = calc_new_size(w,h,args.max[0],args.max[1])
+    if r < newr:
+        resize_by_width(neww)
+    else:
+        resize_by_height(newh)
+
+if args.wide:
+    final_width = (int(args.wide) - w) / 2
+    add_margin(str(final_width)+"x0")
+
+if args.handy:
+    final_width = (230 - w) / 2
+    final_height = (100 - h) / 2
+    add_margin(str(final_width)+"x"+str(final_height))
