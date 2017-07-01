@@ -2,6 +2,7 @@
 import argparse
 import json
 import csv
+import os
 from collections import Counter
 from urllib2 import Request, urlopen, URLError
 
@@ -9,28 +10,28 @@ class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescri
     pass
 
 class DataViz:
-    def __init__(self, dataset_format = ""):
+    def __init__(self):
         parser = argparse.ArgumentParser(
             add_help=True,
             description="Do crazy stuff with csv files",
             epilog="""examples:
     # export json
-        {dataset_format} infile.{dataset_format} --json
-        {dataset_format} infile.{dataset_format} --json --pretty
+        data infile --json
+        data infile --json --pretty
     # general
-        {dataset_format} infile.{dataset_format} -i # print general info
-        {dataset_format} infile.{dataset_format} -l # print lines number
+        data infile -i # print general info
+        data infile -l # print lines number
     # export
-        {dataset_format} infile.{dataset_format} --csv
-        {dataset_format} infile.{dataset_format} --csv --filter field1 field2 field3
-        {dataset_format} infile.{dataset_format} --csv --filter field1 field2 field3 --add newfield
-        {dataset_format} infile.{dataset_format} --json
-        {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3
-        {dataset_format} infile.{dataset_format} --json --filter field1 field2 field3 --add newfield
+        data infile --csv
+        data infile --csv --filter field1 field2 field3
+        data infile --csv --filter field1 field2 field3 --add newfield
+        data infile --json
+        data infile --json --filter field1 field2 field3
+        data infile --json --filter field1 field2 field3 --add newfield
     # info column
-        {dataset_format} infile.{dataset_format} -c field -o # get info from field with occurrence
-        {dataset_format} infile.{dataset_format} + -c field -a # get info from field with average
-        {dataset_format} infile.{dataset_format} -c field -oa # get info from field with occurrence and average""".replace("{dataset_format}",dataset_format),
+        data infile -c field -o # get info from field with occurrence
+        data infile + -c field -a # get info from field with average
+        data infile -c field -oa # get info from field with occurrence and average""",
             formatter_class=CustomFormatter)
         parser.add_argument(
             '-v',
@@ -114,11 +115,17 @@ class DataViz:
             nargs="+",
             help="print informations given field")
         parser.add_argument(
+            '--custom',
+            help="print informations given field",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--gps',
             help="convert addresses in gps location if valid from given column")
 
         self.args = parser.parse_args()
-        self.data, self.fields = self.infile_convert(self.args.infile[0], dataset_format)
+        self.filename, self.ext = os.path.splitext(self.args.infile[0])
+        self.data, self.fields = self.infile_convert(self.args.infile[0], self.ext)
 
         # some fancy code here
 
@@ -173,6 +180,9 @@ class DataViz:
         if self.args.gps:
             self.field_to_gps()
 
+        if self.args.custom:
+            self.do_fancy_custom_stuff()
+
     def getHtml (self,url):
        request = Request(url)
        error = 'Got an error code'
@@ -186,7 +196,7 @@ class DataViz:
 
     def field_to_gps (self):
         fname = self.args.infile[0].split(".")[0]
-        key = "AIzaSyACjZxwJS2CEC5TrNmY1WWbEgEKX-bG3uQ"
+        key = ""
         url = "https://maps.googleapis.com/maps/api/geocode/json"
         for i in self.data:
                 name = i[self.args.gps]
@@ -203,8 +213,6 @@ class DataViz:
                 except:
                     pass
         print "new file: " + str(name) + "_gps.json saved!"
-
-
 
     def add_field (self):
         self.fields += self.args.add
@@ -272,15 +280,25 @@ class DataViz:
 
     def infile_convert (self, file_name, ext):
         with open(file_name, "r") as f:
-            if (ext == "csv"):
+            if (ext == ".csv"):
                 reader = csv.DictReader(f)
                 _fields = [name.strip() for name in reader.fieldnames]
                 _data = list(reader)
                 return _data, _fields
-            elif (ext == "json"):
+            elif (ext == ".json"):
                 _data = json.load(f)
                 _fields = _data[0].keys()
                 return _data, _fields
             else:
                 print "ERROR: invalid format - '" + str(ext) + "'"
                 quit()
+
+    def do_fancy_custom_stuff (self):
+
+        for i in self.fields:
+            #do stuff
+            raise SystemExit()
+
+        for i in self.data:
+            #do stuff
+            raise SystemExit()
