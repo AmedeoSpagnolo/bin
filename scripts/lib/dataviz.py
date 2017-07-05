@@ -155,7 +155,8 @@ class DataViz:
                     temp = Counter(self.get_array_from_field(col))
                     print "    occurrence:"
                     for attr, value in temp.iteritems():
-                        print "        '%s'  -  %s" % (attr, value)
+                        percent = "%.2f" % (float(value)/float(populated) * 100) if populated != 0 else 40
+                        print "        '%s'  -  %s (%s%%)" % (attr, value, percent)
 
         if self.args.column:
             print ",".join(self.args.column)
