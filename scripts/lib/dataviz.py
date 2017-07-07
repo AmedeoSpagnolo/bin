@@ -3,6 +3,7 @@ import argparse
 import json
 import csv
 import os
+
 from collections import Counter
 from urllib2 import Request, urlopen, URLError
 
