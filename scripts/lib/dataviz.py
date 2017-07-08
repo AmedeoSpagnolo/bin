@@ -3,6 +3,7 @@ import argparse
 import json
 import csv
 import os
+import matplotlib.pyplot as plt
 from collections import Counter
 from urllib2 import Request, urlopen, URLError
 
@@ -115,6 +116,10 @@ class DataViz:
             nargs="+",
             help="print informations given field")
         parser.add_argument(
+            '--graph',
+            nargs="+",
+            help="print graph of given field")
+        parser.add_argument(
             '--custom',
             help="print informations given field",
             action="store_true",
@@ -143,7 +148,7 @@ class DataViz:
 
         if self.args.columninfo:
             for col in self.args.columninfo:
-                empty,populated,total,count,average = self.get_column_info(col)
+                empty,populated,total,count,average,_max,_min = self.get_column_info(col)
                 print "%s:" % col
                 print "    total: %s" % total
                 print "    empty: %s" % empty
@@ -151,6 +156,8 @@ class DataViz:
                 if self.args.average:
                     print "    sum: %s" % count
                     print "    average: %s" % average
+                    print "    max: %s" % _max
+                    print "    min: %s" % _min
                 if self.args.occurrence:
                     temp = Counter(self.get_array_from_field(col))
                     print "    occurrence:"
@@ -182,6 +189,9 @@ class DataViz:
 
         if self.args.custom:
             self.do_fancy_custom_stuff()
+
+        if self.args.graph:
+            self.draw(self.args.graph)
 
     def getHtml (self,url):
        request = Request(url)
@@ -238,17 +248,22 @@ class DataViz:
     def get_column_info (self,field):
         empty = 0
         count = 0
+        _max = 0
+        _min = 0
         for i in self.data:
             if i[field] ==  "":
                 empty += 1
             else:
                 try:
-                    count += float(i[field])
+                    item = float(i[field])
+                    count += item
+                    _max = item if _max < item else _max
+                    _min = item if _min > item else _min
                 except:
                     pass
         valid = len(self.data)-empty
         average = count/valid if valid != 0 else None
-        return empty,valid,len(self.data),count,average
+        return empty,valid,len(self.data),count,average,_max,_min
 
     def get_array_from_field (self, field):
         arr = []
@@ -294,11 +309,25 @@ class DataViz:
                 quit()
 
     def do_fancy_custom_stuff (self):
-
         for i in self.fields:
             #do stuff
             raise SystemExit()
-
         for i in self.data:
             #do stuff
             raise SystemExit()
+
+    def get_numbers_from_field (self, field):
+        arr = []
+        for i in self.data:
+            if i[field].isdigit():
+                arr.append(i[field])
+        return arr
+
+    def draw (self, fields):
+        legend = []
+        for f in fields:
+            arr = self.get_numbers_from_field(f)
+            line, = plt.plot(arr, label=f)
+            legend.append(line)
+        plt.legend(handles=legend)
+        plt.show()
