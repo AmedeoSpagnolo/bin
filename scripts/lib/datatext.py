@@ -5,8 +5,8 @@ from nltk import *
 from termcolor import colored
 import re
 
-# import nltk
-# print dir(nltk)
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
+    pass
 
 class DataText:
     def __init__(self):
@@ -21,13 +21,14 @@ class DataText:
         text infile.txt --show --sort
         text infile.txt --show --sort --unique
         text infile.txt --count word1 word2
-        text infile.txt --div
+        text infile.txt --diversity
         text infile.txt --common 4
         text infile.txt --common 10 --plot
         text infile.txt --contains word
         text infile.txt --find word1 word2
         text infile.txt --similar word
-        """)
+        """,
+            formatter_class=CustomFormatter)
         parser.add_argument(
             '-v',
             '--version',
@@ -40,22 +41,26 @@ class DataText:
             action="store_true",
             default=False)
         parser.add_argument(
+            '-s',
             '--sort',
-            help="print number of words",
+            help="with --show sort words",
             action="store_true",
             default=False)
         parser.add_argument(
+            '-p',
             '--show',
             help="print words",
             action="store_true",
             default=False)
         parser.add_argument(
+            '-u',
             '--unique',
-            help="print words",
+            help="with --show print unique",
             action="store_true",
             default=False)
         parser.add_argument(
-            '--div',
+            '-d',
+            '--diversity',
             help="calculate lexical diversity",
             action="store_true",
             default=False)
@@ -76,6 +81,7 @@ class DataText:
             nargs="+",
             help="show dispersion plot")
         parser.add_argument(
+            '-c',
             '--common',
             nargs=1,
             help="show common words")
@@ -91,16 +97,28 @@ class DataText:
             action="store_true",
             default=False)
         parser.add_argument(
+            '--save',
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '--wordlist',
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--contains',
             nargs=1,
             help="show word that contains input")
         parser.add_argument(
             'infile',
             nargs=1)
+        parser.add_argument(
+            'outfile',
+            nargs="?")
 
         self.args = parser.parse_args()
         self.filename, self.ext = os.path.splitext(self.args.infile[0])
         self.data, self.text, self.token = self.infile_convert(self.args.infile[0])
+        self.outfile = self.args.outfile if self.args.outfile else str(self.filename) + "_converted" + str(self.ext)
 
         # some fancy code here
 
@@ -117,16 +135,18 @@ class DataText:
             for i in self.args.count:
                 print "%s: %s" % (i, self.data.count(i))
 
-        if self.args.div:
+        if self.args.diversity:
             if len(self.data) != 0:
                 print float(len(set(self.data))) / float(len(self.data))
 
         if self.args.common:
             fdist1 = FreqDist(self.data)
+            i = int(self.args.common[0])
+            count = i if i > 0 else len(self.data) - 1
             if self.args.plot:
-                fdist1.plot(int(self.args.common[0]))
+                fdist1.plot(count)
             else:
-                for i in fdist1.most_common(int(self.args.common[0])):
+                for i in fdist1.most_common(count):
                     print "%s: %s" % (i[0], i[1])
 
         if self.args.long:
@@ -155,6 +175,12 @@ class DataText:
         if self.args.show:
             print self.data
 
+        if self.args.save:
+            self.export_txt()
+
+        if self.args.wordlist:
+            self.export_wordlist()
+
     def infile_convert (self, file_name):
         text = ""
         temp = tokenize.WhitespaceTokenizer()
@@ -164,3 +190,14 @@ class DataText:
         except:
             pass
         return text.split(), text, Text(temp.tokenize(text))
+
+    def export_txt (self):
+        with open(self.outfile, 'w') as f:
+            f.write(self.text)
+            print "new file: " + str(self.outfile) + " saved!"
+
+    def export_wordlist (self):
+        with open(self.outfile, 'w') as f:
+            for i in self.data:
+                f.write(i+"\n")
+            print "new file: " + str(self.outfile) + " saved!"
