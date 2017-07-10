@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import argparse
 import os
-import nltk
+from nltk import *
+from termcolor import colored
 
 class DataText:
     def __init__(self):
@@ -18,6 +19,7 @@ class DataText:
         text infile.txt --count word1 word2
         text infile.txt --div
         text infile.txt --common 4
+        text infile.txt --common 10 --plot
         """)
         parser.add_argument(
             '-v',
@@ -59,9 +61,17 @@ class DataText:
             nargs=1,
             help="show common words")
         parser.add_argument(
+            '--plot',
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--long',
             action="store_true",
             default=False)
+        parser.add_argument(
+            '--contains',
+            nargs=1,
+            help="show word that contains input")
         parser.add_argument(
             'infile',
             nargs=1)
@@ -90,14 +100,24 @@ class DataText:
                 print float(len(set(self.data))) / float(len(self.data))
 
         if self.args.common:
-            fdist1 = nltk.FreqDist(self.data)
-            for i in fdist1.most_common(int(self.args.common[0])):
-                print "%s: %s" % (i[0], i[1])
+            fdist1 = FreqDist(self.data)
+            if self.args.plot:
+                fdist1.plot(int(self.args.common[0]))
+            else:
+                for i in fdist1.most_common(int(self.args.common[0])):
+                    print "%s: %s" % (i[0], i[1])
 
         if self.args.long:
             long_words = [w for w in self.data if len(w) > 10]
             for i in sorted(set(long_words)):
                 print i
+
+        if self.args.contains:
+            # up = [x.upper() for x in set(self.data)]
+            # print sorted(x for x in up if self.args.contains[0] in x.upper())
+            # print [x for x in up if self.args.contains[0] in x.upper()]
+            for i in [x for x in set(self.data) if self.args.contains[0].upper() in x.upper()]:
+                print colored(self.args.contains[0],"red").join(i.split(self.args.contains[0]))
 
         if self.args.show:
             print self.data
