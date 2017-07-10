@@ -27,6 +27,7 @@ class DataText:
         text infile.txt --contains word
         text infile.txt --find word1 word2
         text infile.txt --similar word
+        text comments.txt battery.txt --find_line battery --save
         """,
             formatter_class=CustomFormatter)
         parser.add_argument(
@@ -179,7 +180,7 @@ class DataText:
                     if i in j:
                         temp.append(j)
                         print self.colour(j,i)
-            self.data = temp
+            self.text = "\n".join(temp)
 
         if self.args.context:
             self.token.common_contexts(self.args.context)
