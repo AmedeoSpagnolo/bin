@@ -73,6 +73,10 @@ class DataText:
             nargs="+",
             help="count words")
         parser.add_argument(
+            '--find_line',
+            nargs="+",
+            help="count words")
+        parser.add_argument(
             '--context',
             nargs="+",
             help="count words")
@@ -117,7 +121,7 @@ class DataText:
 
         self.args = parser.parse_args()
         self.filename, self.ext = os.path.splitext(self.args.infile[0])
-        self.data, self.text, self.token = self.infile_convert(self.args.infile[0])
+        self.data, self.text, self.token, self.lines = self.infile_convert(self.args.infile[0])
         self.outfile = self.args.outfile if self.args.outfile else str(self.filename) + "_converted" + str(self.ext)
 
         # some fancy code here
@@ -160,14 +164,22 @@ class DataText:
 
         if self.args.contains:
             for i in [x for x in set(self.data) if self.args.contains[0].upper() in x.upper()]:
-                # print re.split(self.args.contains[0],i, flags=re.IGNORECASE)
-                print colored(self.args.contains[0],"red").join(re.split(self.args.contains[0],i, flags=re.IGNORECASE))
+                print self.colour(i,self.args.contains[0])
 
         if self.args.similar:
             self.token.similar(self.args.similar)
 
         if self.args.dispersion:
             self.token.dispersion_plot(self.args.dispersion)
+
+        if self.args.find_line:
+            temp = []
+            for i in self.args.find_line:
+                for j in self.lines:
+                    if i in j:
+                        temp.append(j)
+                        print self.colour(j,i)
+            self.data = temp
 
         if self.args.context:
             self.token.common_contexts(self.args.context)
@@ -183,13 +195,15 @@ class DataText:
 
     def infile_convert (self, file_name):
         text = ""
+        lines = []
         temp = tokenize.WhitespaceTokenizer()
         try:
             with open (self.args.infile[0], "r") as myfile:
                 text = myfile.read()
+                lines = [x.strip() for x in text.splitlines()]
         except:
             pass
-        return text.split(), text, Text(temp.tokenize(text))
+        return text.split(), text, Text(temp.tokenize(text)), lines
 
     def export_txt (self):
         with open(self.outfile, 'w') as f:
@@ -201,3 +215,6 @@ class DataText:
             for i in self.data:
                 f.write(i+"\n")
             print "new file: " + str(self.outfile) + " saved!"
+
+    def colour (self, text, highlight, color = "red"):
+        return colored(highlight, color).join(re.split(highlight,text,flags=re.IGNORECASE))
