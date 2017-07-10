@@ -10,13 +10,42 @@ class DataText:
             description="Do crazy stuff with txt files",
             epilog="""examples:
     # title
-        example 1
-        example 2""")
+        text infile.txt -v
+        text infile.txt -l
+        text infile.txt --show
+        text infile.txt --show --sort
+        text infile.txt --show --sort --unique
+        """)
         parser.add_argument(
             '-v',
             '--version',
             action='version',
             version='%(prog)s 1.0')
+        parser.add_argument(
+            '-l',
+            '--lenght',
+            help="print number of words",
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '--sort',
+            help="print number of words",
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '--show',
+            help="print words",
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '--unique',
+            help="print words",
+            action="store_true",
+            default=False)
+        parser.add_argument(
+            '--count',
+            nargs="+",
+            help="count words")
         parser.add_argument(
             'infile',
             nargs=1)
@@ -27,9 +56,27 @@ class DataText:
 
         # some fancy code here
 
-        if self.filename:
-            print "filename: %s" % self.filename
+        if self.args.lenght:
+            print "len: %s" % len(self.data)
+
+        if self.args.unique:
+            self.data = set(self.data)
+
+        if self.args.sort:
+            self.data = sorted(self.data)
+
+        if self.args.count:
+            for i in self.args.count:
+                print "%s: %s" % (i, self.data.count(i))
+
+        if self.args.show:
+            print self.data
 
     def infile_convert (self, file_name):
-        text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        print text.split()
+        text = "Lorem"
+        try:
+            with open (self.args.infile[0], "r") as myfile:
+                text = myfile.read()
+        except:
+            pass
+        return text.split()
