@@ -15,6 +15,9 @@ class DataText:
         text infile.txt --show
         text infile.txt --show --sort
         text infile.txt --show --sort --unique
+        text infile.txt --count word1 word2
+        text infile.txt --div
+        text infile.txt --common 4
         """)
         parser.add_argument(
             '-v',
@@ -43,9 +46,22 @@ class DataText:
             action="store_true",
             default=False)
         parser.add_argument(
+            '--div',
+            help="calculate lexical diversity",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--count',
             nargs="+",
             help="count words")
+        parser.add_argument(
+            '--common',
+            nargs=1,
+            help="show common words")
+        parser.add_argument(
+            '--long',
+            action="store_true",
+            default=False)
         parser.add_argument(
             'infile',
             nargs=1)
@@ -68,6 +84,20 @@ class DataText:
         if self.args.count:
             for i in self.args.count:
                 print "%s: %s" % (i, self.data.count(i))
+
+        if self.args.div:
+            if len(self.data) != 0:
+                print float(len(set(self.data))) / float(len(self.data))
+
+        if self.args.common:
+            fdist1 = nltk.FreqDist(self.data)
+            for i in fdist1.most_common(int(self.args.common[0])):
+                print "%s: %s" % (i[0], i[1])
+
+        if self.args.long:
+            long_words = [w for w in self.data if len(w) > 10]
+            for i in sorted(set(long_words)):
+                print i
 
         if self.args.show:
             print self.data
