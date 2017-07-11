@@ -219,3 +219,6 @@ class DataText:
 
     def colour (self, text, highlight, color = "red"):
         return colored(highlight, color).join(re.split(highlight,text,flags=re.IGNORECASE))
+
+
+# text from html
