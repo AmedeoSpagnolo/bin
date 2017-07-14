@@ -149,17 +149,27 @@ class DataViz:
         if self.args.columninfo:
             for col in self.args.columninfo:
                 empty,populated,total,count,average,_max,_min = self.get_column_info(col)
+                temp = Counter(self.get_array_from_field(col))
+                count_unique = 0
+                not_unique = []
+                for attr, value in temp.iteritems():
+                    if value == 1:
+                        count_unique += 1
+                    else:
+                        not_unique.append(value)
+                        # print attr, value
                 print "%s:" % col
                 print "    total: %s" % total
                 print "    empty: %s" % empty
                 print "    populated: %s" % populated
+                print "    unique: %s" % count_unique
+                # print "    not unique: %s" % (not_unique)
                 if self.args.average:
                     print "    sum: %s" % count
                     print "    average: %s" % average
                     print "    max: %s" % _max
                     print "    min: %s" % _min
                 if self.args.occurrence:
-                    temp = Counter(self.get_array_from_field(col))
                     print "    occurrence:"
                     for attr, value in temp.iteritems():
                         percent = "%.2f" % (float(value)/float(populated) * 100) if populated != 0 else 40

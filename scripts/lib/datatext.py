@@ -5,6 +5,10 @@ from nltk import *
 from termcolor import colored
 import re
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
 

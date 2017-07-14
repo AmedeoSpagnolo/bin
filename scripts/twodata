@@ -1,0 +1,298 @@
+#!/usr/bin/python
+import sys
+sys.path.append(sys.path[0])
+
+#!/usr/bin/python
+import argparse
+import json
+import csv
+import os
+import matplotlib.pyplot as plt
+from collections import Counter
+from urllib2 import Request, urlopen, URLError
+
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
+    pass
+
+class DataTwoViz:
+    def __init__(self):
+        parser = argparse.ArgumentParser(
+            add_help=True,
+            description="Do crazy stuff with multiple csv files",
+            epilog="""examples:
+            """,
+            formatter_class=CustomFormatter)
+        parser.add_argument(
+            '-v',
+            '--version',
+            action='version',
+            version='%(prog)s 1.0')
+        parser.add_argument(
+            'infile',
+            nargs="+")
+
+
+        self.args = parser.parse_args()
+        self.filename = [os.path.splitext(x)[0] for x in self.args.infile]
+        self.ext = [os.path.splitext(x)[1] for x in self.args.infile]
+        self.data = [self.infile_convert(x,os.path.splitext(x)[1])[0] for x in self.args.infile]
+        self.fields = [self.infile_convert(x,os.path.splitext(x)[1])[1] for x in self.args.infile]
+
+        old = {
+            "data": self.data[0],
+            "fields": self.fields[0],
+            "name": self.filename[0]
+        }
+        new = {
+            "data": self.data[1],
+            "fields": self.fields[1],
+            "name": self.filename[1]
+        }
+
+        temp = []
+        count_missing = 0
+        count = 0
+        __temp_data = []
+
+        for i in new["data"]:
+            temp.append(i["Account ID"])
+
+        for i in old["data"]:
+            if i["Salesforce ID"] not in temp:
+                count_missing += 1
+                __temp_data.append({
+                      "id_old": i["Salesforce ID"],
+                      "type": i["Type"],
+                      "account": i["Account Name"],
+                      "city": i["Billing City"],
+                      "country": i["Billing Country"],
+                      "model": i["Device Model"],
+                      "welcomescreen": i["Welcome Screen Type"]
+                })
+                # print "ERROR: " + str(i["Salesforce ID"])
+            else:
+                count += 1
+        # print count_missing
+
+        _dataset = __temp_data
+        _fields = __temp_data[0].keys()
+        # print _dataset
+        print _dataset[0]
+        self.export_csv (_fields, _dataset, "list_missing_new_id.csv")
+
+        # print "count_missing: %s" % count_missing
+        # print "count: %s" % count
+        # print ""
+
+        # print new["fields"]
+        # print old["fields"]
+        # typ = []
+
+
+        def diff(old_field, new_field):
+            count_diff = 0
+            for i in new["data"]:
+                t = [x[old_field] for x in old["data"] if x["Salesforce ID"] == i["Account ID"]]
+                if i[new_field] != "".join(t) and len(t) > 0:
+                    count_diff += 1
+                    print "%s    %s    %s" % (i["Account ID"], "".join(t), i[new_field])
+            # print count_diff
+
+        def export_new_version():
+            new_dataset = []
+            for n in new["data"]:
+                t = [x for x in old["data"] if x["Salesforce ID"] == n["Account ID"]]
+                if len(t) > 0:
+                    o = t[0]
+                    # main
+                    new_dataset.append({
+                      "id": n["AccountID (18-Digit)"],
+                      "type": n["Type"],
+                      "account": n["Account Name"],
+                      "city": n["Billing City"],
+                      "country": n["Billing Country"],
+                      "model": n["Current Device Model"],
+                      "welcomescreen": o["Welcome Screen Type"]
+                    })
+                else:
+                    # new not old
+                    new_dataset.append({
+                      "id": n["AccountID (18-Digit)"],
+                      "type": n["Type"],
+                      "account": n["Account Name"],
+                      "city": n["Billing City"],
+                      "country": n["Billing Country"],
+                      "model": n["Current Device Model"],
+                      "welcomescreen": ""
+                    })
+                    pass
+            return new_dataset
+
+        # _fields = ["id","type","account","city","country","model","welcomescreen"]
+        # _dataset = export_new_version()
+        # self.export_csv (_fields, _dataset, "newlist.csv")
+
+        # diff("Type","Type")
+        # diff("Account Name","Account Name")
+        # diff("Billing City","Billing City")
+        # diff("Billing Country","Billing Country")
+        # diff("Device Model","Current Device Model")
+
+                    # if n["Account ID"] == t[0]["Salesforce ID"]:
+                    #     print "%s %s" % (n["Account ID"], t[0]["Salesforce ID"])
+        # print count_diff
+        # print count_zero
+
+        # for i in old["data"]:
+        #     if i["Salesforce ID"] in typ:
+        #         if
+        #         temp.append(i["Account ID"])
+
+
+        # some fancy code here
+
+
+
+    def getHtml (self,url):
+       request = Request(url)
+       error = 'Got an error code'
+       try:
+           response = urlopen(request)
+           _resp = response.read()
+           return _resp
+       except URLError, e:
+           print 'Got an error code:', e
+           return '{"status": "error", "results", "none"}'
+
+    def field_to_gps (self):
+        fname = self.args.infile[0].split(".")[0]
+        key = ""
+        url = "https://maps.googleapis.com/maps/api/geocode/json"
+        for i in self.data:
+                name = i[self.args.gps]
+                api = url + "?address=" + name.replace(" ","+") + "&key=" + key
+                try:
+                    temp = json.loads(self.getHtml(api))
+                    lng = temp['results'][0]['geometry']['location']['lng']
+                    lat = temp['results'][0]['geometry']['location']['lat']
+                    print lng,lat
+                    with open(str(fname) + '_gps.json', 'a') as f:
+                        newline = "[%s,%s],\n" % (lng,lat)
+                        f.write(newline)
+                        f.close()
+                except:
+                    pass
+        print "new file: " + str(name) + "_gps.json saved!"
+
+    def add_field (self):
+        self.fields += self.args.add
+        for i in self.data:
+            for att in self.args.add:
+                i[att] = ""
+
+    def remove_field (self):
+        for att in self.args.remove:
+            self.fields.remove(att)
+            for i in self.data:
+                del i[att]
+
+    def only_field (self):
+        self.fields = [x for x in self.fields if x in self.args.only]
+        for i,s in enumerate(self.data):
+            el = {}
+            for key in s:
+                if key in self.args.only:
+                    el[key] = s[key]
+            self.data[i] = el
+
+    def get_column_info (self,field):
+        empty = 0
+        count = 0
+        _max = 0
+        _min = 0
+        for i in self.data:
+            if i[field] ==  "":
+                empty += 1
+            else:
+                try:
+                    item = float(i[field])
+                    count += item
+                    _max = item if _max < item else _max
+                    _min = item if _min > item else _min
+                except:
+                    pass
+        valid = len(self.data)-empty
+        average = count/valid if valid != 0 else None
+        return empty,valid,len(self.data),count,average,_max,_min
+
+    def get_array_from_field (self, field):
+        arr = []
+        for i in self.data:
+            arr.append(i[field])
+        return arr
+
+    def export_csv (self, fields, dataset, outfile):
+        with open(str(outfile), 'w') as f:
+            f.write(",".join(['"'+str(x)+'"' for x in fields]) + "\n")
+            for i in dataset:
+                line = []
+                for j in fields:
+                    line.append(i[j])
+                f.write(",".join(['"'+str(y)+'"' for y in line]) + "\n")
+            print "new file: " + str(outfile) + " saved!"
+
+    def export_json (self):
+        name = self.args.infile[0].split(".")[0]
+        if self.args.pretty:
+            with open(str(name) + '_converted.json', 'w') as f:
+                json.dump(self.data, f)
+                print "new file: " + str(name) + "_converted.json saved!"
+        else:
+            with open(str(name) + '_pretty_converted.json', 'w') as f:
+                json.dump(self.data, f, sort_keys=True, indent=4)
+                print "new file: " + str(name) + "_pretty_converted.json saved!"
+
+
+
+    def do_fancy_custom_stuff (self):
+        for i in self.fields:
+            #do stuff
+            raise SystemExit()
+        for i in self.data:
+            #do stuff
+            raise SystemExit()
+
+    def get_numbers_from_field (self, field):
+        arr = []
+        for i in self.data:
+            if i[field].isdigit():
+                arr.append(i[field])
+        return arr
+
+    def draw (self, fields):
+        legend = []
+        for f in fields:
+            arr = self.get_numbers_from_field(f)
+            line, = plt.plot(arr, label=f)
+            legend.append(line)
+        plt.legend(handles=legend)
+        plt.show()
+
+
+
+    def infile_convert (self, file_name, ext):
+        with open(file_name, "r") as f:
+            if (ext == ".csv"):
+                reader = csv.DictReader(f)
+                _fields = [name.strip() for name in reader.fieldnames]
+                _data = list(reader)
+                return _data, _fields
+            elif (ext == ".json"):
+                _data = json.load(f)
+                _fields = _data[0].keys()
+                return _data, _fields
+            else:
+                print "ERROR: invalid format - '" + str(ext) + "'"
+                quit()
+
+DataTwoViz()
