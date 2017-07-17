@@ -78,6 +78,11 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
+            '--printnounique',
+            help="with -c/--column print no unique",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--csv',
             help="export pretty json",
             action="store_true",
@@ -157,7 +162,8 @@ class DataViz:
                         count_unique += 1
                     else:
                         not_unique.append(value)
-                        # print attr, value
+                        if self.args.printnounique:
+                            print attr, value
                 print "%s:" % col
                 print "    total: %s" % total
                 print "    empty: %s" % empty
