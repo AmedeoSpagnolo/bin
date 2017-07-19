@@ -100,6 +100,12 @@ class DataViz:
             default=False,
             required=False)
         parser.add_argument(
+            '--filter',
+            help="with --csv or --json export add fields with filter ex. --filter field=name",
+            nargs="+",
+            default=False,
+            required=False)
+        parser.add_argument(
             '--remove',
             help="with --csv or --json export without given fields",
             nargs="+",
@@ -138,6 +144,13 @@ class DataViz:
         self.data, self.fields = self.infile_convert(self.args.infile[0], self.ext)
 
         # some fancy code here
+        
+        if self.args.filter:
+            for i in self.args.filter:
+                if i.split("=")[0] in self.fields:
+                    self.data = [x for x in self.data if x[i.split("=")[0]] == i.split("=")[1]]
+                else:
+                    print "%s not in field" % i.split("=")[0]
 
         if self.args.lines:
             print "lines: %s" % len(self.data)
