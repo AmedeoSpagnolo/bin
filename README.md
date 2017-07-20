@@ -1,5 +1,6 @@
 ## links
 http://www.nltk.org/book/ch01.html
+https://pythonprogramming.net/
 
 ## setup
 update PATH in ~/.bash_profile
