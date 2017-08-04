@@ -78,6 +78,11 @@ class DataViz:
             action="store_true",
             default=False)
         parser.add_argument(
+            '--printnounique',
+            help="with -c/--column print no unique",
+            action="store_true",
+            default=False)
+        parser.add_argument(
             '--csv',
             help="export pretty json",
             action="store_true",
@@ -91,6 +96,12 @@ class DataViz:
         parser.add_argument(
             '--add',
             help="with --csv or --json export add fields",
+            nargs="+",
+            default=False,
+            required=False)
+        parser.add_argument(
+            '--filter',
+            help="with --csv or --json export add fields with filter ex. --filter field=name",
             nargs="+",
             default=False,
             required=False)
@@ -133,6 +144,13 @@ class DataViz:
         self.data, self.fields = self.infile_convert(self.args.infile[0], self.ext)
 
         # some fancy code here
+        
+        if self.args.filter:
+            for i in self.args.filter:
+                if i.split("=")[0] in self.fields:
+                    self.data = [x for x in self.data if x[i.split("=")[0]] == i.split("=")[1]]
+                else:
+                    print "%s not in field" % i.split("=")[0]
 
         if self.args.lines:
             print "lines: %s" % len(self.data)
@@ -149,17 +167,28 @@ class DataViz:
         if self.args.columninfo:
             for col in self.args.columninfo:
                 empty,populated,total,count,average,_max,_min = self.get_column_info(col)
+                temp = Counter(self.get_array_from_field(col))
+                count_unique = 0
+                not_unique = []
+                for attr, value in temp.iteritems():
+                    if value == 1:
+                        count_unique += 1
+                    else:
+                        not_unique.append(value)
+                        if self.args.printnounique:
+                            print attr, value
                 print "%s:" % col
                 print "    total: %s" % total
                 print "    empty: %s" % empty
                 print "    populated: %s" % populated
+                print "    unique: %s" % count_unique
+                # print "    not unique: %s" % (not_unique)
                 if self.args.average:
                     print "    sum: %s" % count
                     print "    average: %s" % average
                     print "    max: %s" % _max
                     print "    min: %s" % _min
                 if self.args.occurrence:
-                    temp = Counter(self.get_array_from_field(col))
                     print "    occurrence:"
                     for attr, value in temp.iteritems():
                         percent = "%.2f" % (float(value)/float(populated) * 100) if populated != 0 else 40

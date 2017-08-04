@@ -1,7 +1,6 @@
-text1.concordance("monstrous")
-text1.similar("lazy")
->>> text2.common_contexts(["monstrous", "very"])
+## links
 http://www.nltk.org/book/ch01.html
+https://pythonprogramming.net/
 
 ## setup
 update PATH in ~/.bash_profile
@@ -11,3 +10,6 @@ update PATH in ~/.bash_profile
 or run:
 
 	echo 'export PATH="$PATH:$HOME/bin/scripts"' >> ~/.bash_profile; source ~/.bash_profile;
+
+## to do
+>>> text2.common_contexts(["monstrous", "very"])
