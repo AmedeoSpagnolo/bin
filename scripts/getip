@@ -1,0 +1,13 @@
+#/bin/bash
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+   IP=$(hostname -I | cut -f 1 -d " ")
+   if [ -z "$IP" ]
+   then
+       IP=127.0.0.1
+   fi
+else
+   IP=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' | head -n 1)
+fi
+
+echo $IP
