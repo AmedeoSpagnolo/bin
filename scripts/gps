@@ -28,17 +28,8 @@ def getHtml (url):
 
 my_json = json.loads(getHtml(api))
 
-# print my_json
-# print "status: "                    + str(my_json['status'])
-# print "formatted_address: "         + str(my_json['results'][0]['formatted_address'])
-# print "type: "                      + str(my_json['results'][0]['types'][0])
-# print "position: ["                  + str(my_json['results'][0]['geometry']['location']['lng']) + ", " + str(my_json['results'][0]['geometry']['location']['lat']) + "]"
-
-# print json.dumps(my_json['results'], sort_keys=True, indent=2)
-
 lon = str(my_json['results'][0]['geometry']['location']['lng'])
 lat = str(my_json['results'][0]['geometry']['location']['lat'])
 
-print "all: %s" % (my_json['results'][0])
-print "name: %s" % name
-print "pos: [%s, %s]" % (lon,lat)
+print name
+print "[%s, %s]" % (lon,lat)
