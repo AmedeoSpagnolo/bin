@@ -10,11 +10,11 @@ import sys
 import json
 import math
 
-name = sys.argv[1]
+names = sys.argv[1:]
 
 key = "AIzaSyACjZxwJS2CEC5TrNmY1WWbEgEKX-bG3uQ"
 url = "https://maps.googleapis.com/maps/api/geocode/json"
-api = url + "?address=" + name.replace(" ","+") + "&key=" + key
+apis = [url + "?address=" + name.replace(" ","+") + "&key=" + key for name in names]
 
 def getHtml (url):
     request = Request(url)
@@ -60,12 +60,13 @@ def printDimensions(res):
 
     print exp
 
-my_json = json.loads(getHtml(api))
+for api in apis:
+    my_json = json.loads(getHtml(api))
 
-if my_json['status'] == "OK":
-    # printResult(my_json)
-    # printOnlyLatLon(my_json)
-    printDimensions(my_json)
+    if my_json['status'] == "OK":
+        # printResult(my_json)
+        # printOnlyLatLon(my_json)
+        printDimensions(my_json)
 
-else:
-    raise ValueError('cannot find %s' % name)
+    else:
+        raise ValueError('cannot find %s' % name)
