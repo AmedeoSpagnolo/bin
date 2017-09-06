@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # run with Python 2.7.10
 
-# how to use it
-# address_to_gps "123 My Address, Place, Country"
-# address_to_gps "1600 Amphitheatre Parkway, Mountain View, CA"
+#   HOW TO USE IT:
+#       address_to_gps "123 My Address, Place, Country"
+#       address_to_gps "1600 Amphitheatre Parkway, Mountain View, CA"
 
 from urllib2 import Request, urlopen, URLError
 import sys
 import json
+import math
 
 name = sys.argv[1]
 
@@ -16,20 +17,55 @@ url = "https://maps.googleapis.com/maps/api/geocode/json"
 api = url + "?address=" + name.replace(" ","+") + "&key=" + key
 
 def getHtml (url):
-   request = Request(url)
-   error = 'Got an error code'
-   try:
-       response = urlopen(request)
-       _resp = response.read()
-       return _resp
-   except URLError, e:
-       print 'Got an error code:', e
-       return '{"status": "error", "results", "none"}'
+    request = Request(url)
+    error = 'Got an error code'
+    try:
+        response = urlopen(request)
+        _resp = response.read()
+        return _resp
+    except URLError, e:
+        print 'Got an error code:', e
+        return '{"status": "error", "results", "none"}'
+
+def printResult(res):
+    print json.dumps(res)
+
+def printOnlyLatLon(res):
+    formatted_address = str(res['results'][0]['formatted_address'])
+    lon = str(res['results'][0]['geometry']['location']['lng'])
+    lat = str(res['results'][0]['geometry']['location']['lat'])
+    print formatted_address
+    print "[%s, %s]" % (lon,lat)
+
+def printDimensions(res):
+    formatted_address = str(res['results'][0]['formatted_address'])
+    pos = [
+        res['results'][0]['geometry']['location']['lng'],
+        res['results'][0]['geometry']['location']['lat']]
+    northeast = [
+        res['results'][0]['geometry']['viewport']['northeast']['lng'],
+        res['results'][0]['geometry']['viewport']['northeast']['lat']]
+    southwest = [
+        res['results'][0]['geometry']['viewport']['southwest']['lng'],
+        res['results'][0]['geometry']['viewport']['southwest']['lat']]
+
+    exp = ("{\n"
+           "   \"formatted_address\": \"" + formatted_address + "\",\n"
+           "   \"pos\": "           + str(pos) + ",\n"
+           "   \"northeast\": "     + str(northeast) + ",\n"
+           "   \"southwest\": "     + str(southwest) + ",\n"
+           "   \"width\": "         + str(math.fabs(northeast[0] - southwest[0])) + ",\n"
+           "   \"heigth\": "        + str(math.fabs(northeast[1] - southwest[1])) + ",\n"
+           "},")
+
+    print exp
 
 my_json = json.loads(getHtml(api))
 
-lon = str(my_json['results'][0]['geometry']['location']['lng'])
-lat = str(my_json['results'][0]['geometry']['location']['lat'])
+if my_json['status'] == "OK":
+    # printResult(my_json)
+    # printOnlyLatLon(my_json)
+    printDimensions(my_json)
 
-print name
-print "[%s, %s]" % (lon,lat)
+else:
+    raise ValueError('cannot find %s' % name)
