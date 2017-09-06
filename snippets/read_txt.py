@@ -6,4 +6,4 @@ def read_text(file_name):
 
 text = read_text(sys.argv[1])
 
-print "text: %s" % text[0]
+print "text: %s" % text

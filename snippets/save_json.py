@@ -6,4 +6,4 @@ def export_json (file_name, content, pretty):
     with open(file_name, 'w') as f:
         json.dump(content, f, indent = 4 if pretty else None)
 
-export_json("outfile.json", dataset, False)
+export_json("outfile.json", dataset, True)
