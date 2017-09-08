@@ -1,0 +1,10 @@
+#!/usr/bin/python
+import sys
+from colormap import rgb2hex
+
+names = sys.argv[1:]
+
+for name in names:
+    rgb = str(name).split("rgb(")[1].split(")")[0].split(",")
+    r, g, b = (int(rgb[0]), int(rgb[1]), int(rgb[2]))
+    print rgb2hex(r,g,b)

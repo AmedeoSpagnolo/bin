@@ -1,0 +1,5 @@
+#!/usr/bin/python
+import sys
+numbers = sys.argv[1:]
+arr = [int(n) * 360 / 100 for n in numbers]
+print " ".join([str(a) for a in arr])
