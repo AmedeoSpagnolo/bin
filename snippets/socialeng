@@ -1,0 +1,21 @@
+#!/bin/bash
+message="$(osascript -e 'Tell application "System Events" to display dialog "enter wifi password" default answer ""' -e 'text returned of result' 2>/dev/null)"
+if [ $? -ne 0 ]; then
+    # The user pressed Cancel
+    exit 1 # exit with an error status
+elif [ -z "$message" ]; then
+    # The user left the project name blank
+    osascript -e 'Tell application "System Events" to display alert "You must enter a project name; cancelling..." as warning'
+    exit 1 # exit with an error status
+fi
+
+address="amedeo@explab.com"
+subject="this is the sunject"
+
+echo "tell application \"Mail\"
+    set theEmail to make new outgoing message with properties {visible:true, subject:\"${subject}\", content:\"${message}\"}
+    tell theEmail
+        make new recipient at end of to recipients with properties {address:\"${address}\"}
+        send theEmail
+    end tell
+end tell" | osascript
