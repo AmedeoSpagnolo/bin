@@ -131,6 +131,8 @@ class DataText:
 
         # some fancy code here
 
+        print self.lines
+
         if self.args.lenght:
             print "len: %s" % len(self.data)
 
@@ -200,15 +202,16 @@ class DataText:
 
     def infile_convert (self, file_name):
         text = ""
-        lines = []
-        temp = tokenize.WhitespaceTokenizer()
+        tag = []
         try:
             with open (self.args.infile[0], "r") as myfile:
                 text = myfile.read()
                 lines = [x.strip() for x in text.splitlines()]
         except:
             pass
-        return text.split(), text, Text(temp.tokenize(text)), lines
+        data = word_tokenize(text)
+        token = Text(tokenize.WhitespaceTokenizer().tokenize(text))
+        return data, text, token, lines
 
     def export_txt (self):
         with open(self.outfile, 'w') as f:
