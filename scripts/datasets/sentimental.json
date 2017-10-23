@@ -1,0 +1,18 @@
+[
+  {"text": "I love this sandwich.", "label": "pos"},
+  {"text": "this is an amazing place!", "label": "pos"},
+  {"text": "I feel very good about these beers.", "label": "pos"},
+  {"text": "this is my best work.", "label": "pos"},
+  {"text": "what an awesome view", "label": "pos"},
+  {"text": "I do not like this restaurant", "label": "neg"},
+  {"text": "I am tired of this stuff.", "label": "neg"},
+  {"text": "I can't deal with this", "label": "neg"},
+  {"text": "he is my sworn enemy!", "label": "neg"},
+  {"text": "my boss is horrible.", "label": "neg"},
+  {"text": "the beer was good.", "label": "pos"},
+  {"text": "I do not enjoy my job", "label": "neg"},
+  {"text": "I ain't feeling dandy today.", "label": "neg"},
+  {"text": "I feel amazing!", "label": "pos"},
+  {"text": "Gary is a friend of mine.", "label": "pos"},
+  {"text": "I can't believe I'm doing this.", "label": "neg"}
+]

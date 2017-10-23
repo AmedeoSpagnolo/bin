@@ -1,0 +1,25 @@
+#!/usr/bin/python
+import os
+import sys
+from textblob.classifiers import NaiveBayesClassifier
+
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
+
+def training_from_file():
+	filename = str(get_script_path()) + '/datasets/sentimental.json'
+	with open(filename, 'r') as fp:
+		global cl
+		cl = NaiveBayesClassifier(fp, format="json")
+
+def analize(sent):
+	result = cl.classify(sent)
+	percent = int(cl.prob_classify(sent).prob(result)*100)
+	print "%s%% %s - '%s'" % (percent, result, sent)
+
+if len(sys.argv) > 1:
+	training_from_file()
+	analize(sys.argv[1])
+else:
+	print "ERROR missing argv!"
+	print "usage: python sentiment.py <sentence>"
