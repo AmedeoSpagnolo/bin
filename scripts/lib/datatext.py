@@ -2,6 +2,7 @@
 import argparse
 import os
 from nltk import *
+from nltk.corpus import stopwords
 from termcolor import colored
 import re
 
@@ -126,11 +127,11 @@ class DataText:
 
         self.args = parser.parse_args()
         self.filename, self.ext = os.path.splitext(self.args.infile[0])
-        self.data, self.text, self.token, self.lines = self.infile_convert(self.args.infile[0])
+        self.data, self.text, self.token, self.lines, self.tags = self.infile_convert(self.args.infile[0])
         self.outfile = self.args.outfile if self.args.outfile else str(self.filename) + "_converted" + str(self.ext)
 
         # some fancy code here
-
+        print self.data
         if self.args.lenght:
             print "len: %s" % len(self.data)
 
@@ -200,15 +201,18 @@ class DataText:
 
     def infile_convert (self, file_name):
         text = ""
-        lines = []
-        temp = tokenize.WhitespaceTokenizer()
+        tag = []
+        # stop = set(stopwords.words('english'))
         try:
             with open (self.args.infile[0], "r") as myfile:
                 text = myfile.read()
                 lines = [x.strip() for x in text.splitlines()]
         except:
             pass
-        return text.split(), text, Text(temp.tokenize(text)), lines
+        data = [w for w in word_tokenize(text) if w.lower() not in stopwords.words('english')]
+        token = Text(tokenize.WhitespaceTokenizer().tokenize(text))
+        tags = "pos_tag(data)"
+        return data, text, token, lines, tags
 
     def export_txt (self):
         with open(self.outfile, 'w') as f:
