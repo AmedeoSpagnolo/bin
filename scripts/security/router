@@ -1,0 +1,5 @@
+#/bin/bash
+
+default=$(netstat -nr | grep default | awk '{print $2}' | head -n 1)
+
+echo $default
