@@ -7,7 +7,8 @@ def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def training_from_file():
-	filename = str(get_script_path()) + '/datasets/sentimental.json'
+	# filename = str(get_script_path()) + '/datasets/sentimental.json'
+	filename = str(get_script_path()) + '/datasets/dataset_small1.json'
 	with open(filename, 'r') as fp:
 		global cl
 		cl = NaiveBayesClassifier(fp, format="json")
