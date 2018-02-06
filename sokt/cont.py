@@ -21,7 +21,7 @@ def handle_client(client_socket):
     print "[*] " + mesg
     write_new_line(FILE_NAME, mesg + "\n")
     client_socket.send('ACK')
-    client_socket.close()
+    # client_socket.close()
 
 def tcp_server():
     server = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
@@ -33,7 +33,7 @@ def tcp_server():
         client, addr = server.accept()
         mesg = "[*] Accepted connection from: %s:%d" %(addr[0], addr[1])
         print "[*] " + mesg + time_now() + "\n" + mesg
-	    write_new_line(FILE_NAME, "[*] " + time_now() + "\n" + mesg)
+	    # write_new_line(FILE_NAME, "[*] " + time_now() + "\n" + mesg)
         client_handler = threading.Thread(target=handle_client, args=(client,))
         client_handler.start()
 
