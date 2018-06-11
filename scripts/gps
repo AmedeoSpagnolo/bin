@@ -59,14 +59,15 @@ def printDimensions(res):
            "},")
 
     print exp
-
-for api in apis:
-    my_json = json.loads(getHtml(api))
-
-    if my_json['status'] == "OK":
-        # printResult(my_json)
-        # printOnlyLatLon(my_json)
-        printDimensions(my_json)
-
-    else:
-        raise ValueError('cannot find %s' % name)
+# print("__"+str(sys.argv[1:])+"__")
+if (len(sys.argv[1:]) < 1):
+    print "usage: gps '<city>'"
+else:
+    for api in apis:
+        my_json = json.loads(getHtml(api))
+        if my_json['status'] == "OK":
+            # printResult(my_json)
+            # printOnlyLatLon(my_json)
+            printDimensions(my_json)
+        else:
+            raise ValueError('cannot find %s' % name)
