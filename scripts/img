@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # for f in *.png; do resize $f --max 20 20; done
 
-
 import argparse
 import sys
 import os
