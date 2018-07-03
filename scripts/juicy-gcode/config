@@ -1,0 +1,7 @@
+gcode
+{
+   begin = ""
+   end = "G01 Z1000;G01 Z1000"
+   toolon =  "G00 Z0"
+   tooloff = "G01 Z1000"
+}

@@ -1,0 +1,92 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from time import sleep
+from selenium import webdriver
+from pyvirtualdisplay import Display
+
+class Spider():
+	def __init__(self):
+		self.all_items = []
+
+	def start_driver(self):
+		print('starting driver...')
+		self.display = Display(visible=0, size=(800, 600))
+		self.display.start()
+		self.driver = webdriver.Chrome("/var/chromedriver/chromedriver")
+
+	def close_driver(self):
+		print('closing driver...')
+		self.display.stop()
+		self.driver.quit()
+		print('closed!')
+
+	def get_page(self, url):
+		print('getting page...')
+		self.driver.get(url)
+
+	def login(self):
+		print('getting pass the gate page...')
+		try:
+			form = self.driver.find_element_by_xpath('//*[@class="signup-login-form"]')
+			form.find_element_by_xpath(USER_ELEM).send_keys(USER)
+			form.find_element_by_xpath(PASS_ELEM).send_keys(PASS)
+			form.find_element_by_xpath(SUBMIT_ELEM).click()
+			sleep(2)
+		except Exception:
+			pass
+
+	def click_element(self, targets):
+		print('click element...')
+		for div in self.driver.find_elements_by_xpath(targets):
+			try:
+				div.click()
+			except:
+				pass
+
+	def get_att(self, targets, attr):
+		print('grabbing attr...')
+		for div in self.driver.find_elements_by_xpath(targets):
+			try:
+				print div.get_attribute("src")
+			except:
+				pass
+
+	def get_tex(self, targets):
+		print('grabbing text...')
+		for div in self.driver.find_elements_by_xpath(targets):
+			try:
+				print div.text
+			except:
+				pass
+
+	def write_text(self, targets, new_text):
+		print('sending text...')
+		for div in self.driver.find_elements_by_xpath(targets):
+			try:
+				div.send_keys(new_text)
+			except:
+				pass
+
+def run_example_0():
+	spider = Spider()
+	spider.start_driver()
+	spider.get_page("http://amedeospagnolo.com/en/")
+	spider.click_element('.//*[@sort="coding"]')
+	spider.click_element('.//*[@class="item_about"]')
+	spider.get_tex('.//*[@class="sentence"]')
+	spider.get_att('.//*[@class="sentence_link_about"]', 'href')
+	sleep(5)
+	spider.close_driver()
+
+
+def run_example_1():
+	spider = Spider()
+	spider.start_driver()
+	spider.get_page("http://hackyll.com/")
+	spider.get_tex('.//div')
+	spider.get_att('.//script', 'src')
+	spider.write_text('.//input[@id="m"]', 'custom value')
+	sleep(5)
+
+run_example_1()
