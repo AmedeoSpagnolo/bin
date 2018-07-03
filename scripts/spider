@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
 from time import sleep
 from selenium import webdriver
 from pyvirtualdisplay import Display
@@ -25,10 +26,10 @@ class Spider():
 		print('getting page...')
 		self.driver.get(url)
 
-	def login(self):
+	def login(self,USER,PASS,FORM_ELEM,USER_ELEM,PASS_ELEM,SUBMIT_ELEM):
 		print('getting pass the gate page...')
 		try:
-			form = self.driver.find_element_by_xpath('//*[@class="signup-login-form"]')
+			form = self.driver.find_element_by_xpath(FORM_ELEM)
 			form.find_element_by_xpath(USER_ELEM).send_keys(USER)
 			form.find_element_by_xpath(PASS_ELEM).send_keys(PASS)
 			form.find_element_by_xpath(SUBMIT_ELEM).click()
@@ -89,4 +90,22 @@ def run_example_1():
 	spider.write_text('.//input[@id="m"]', 'custom value')
 	sleep(5)
 
-run_example_1()
+def run_example_2():
+	spider = Spider()
+	spider.start_driver()
+	spider.get_page("https://hk.stubhubtickets.com/backoffice/login")
+	sleep(1)
+	spider.login(sys.argv[1],sys.argv[2],'.//form[@action="login"]','.//input[@name="login"]','.//input[@name="passwd"]','.//button[@value="Submit"]')
+	sleep(0.5)
+	spider.click_element('.//*[@id="btn-reports"]')
+	# spider.click_element('.//button[@value="Submit"]')
+	sleep(50)
+
+def run_example_3():
+	spider = Spider()
+	spider.start_driver()
+	spider.get_page("https://the-fofo.com/")
+	spider.get_att('.//img', 'src')
+	sleep(3)
+
+run_example_3()
