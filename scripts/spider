@@ -108,4 +108,4 @@ def run_example_3():
 	spider.get_att('.//img', 'src')
 	sleep(3)
 
-run_example_3()
+run_example_2()
