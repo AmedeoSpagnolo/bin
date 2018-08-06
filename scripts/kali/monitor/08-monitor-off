@@ -1,0 +1,5 @@
+#!/bin/bash
+ifconfig wlan1 down;
+ifconfig wlan0 down;
+airmon-ng stop wlan1mon;
+ifconfig wlan1 up;

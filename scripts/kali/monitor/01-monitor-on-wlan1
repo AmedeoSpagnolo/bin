@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "also consider:";
+echo "pgrep NetworkManager | xargs kill";
+echo "pgrep wpa_supplicant | xargs kill";
+echo "restart:";
+echo "service NetworkManager restart";
+echo "service wpa_supplicant restart";
+
+airmon-ng;
+airmon-ng check;
+airmon-ng check kill;
+
+ifconfig wlan0 down;
+airmon-ng start wlan1;
+ifconfig;

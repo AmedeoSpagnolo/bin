@@ -1,0 +1,2 @@
+#!/bin/bash
+airodump-ng -c $CH --bssid $AP -w capture wlan1mon;
