@@ -1,0 +1,14 @@
+#!/usr/bin/python
+
+from PIL import Image
+import os, sys
+
+def pngToJpg(input_file, output_file):
+    img = Image.open(input_file).convert('RGB')
+    bg = Image.new('RGB',img.size,(255,255,255))
+    x, y = img.size
+
+    bg.paste(img, (0, 0, x, y))
+    bg.save(output_file, quality=95)
+
+pngToJpg(sys.argv[1],sys.argv[1]+".jpg")
