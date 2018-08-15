@@ -1,0 +1,3 @@
+#!/bin/bash
+
+airdecap-ng -e '$ESSID' -p $PASS  ./*.cap -o decrypted.cap

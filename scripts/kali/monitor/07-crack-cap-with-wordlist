@@ -1,0 +1,2 @@
+#!/bin/bash
+aircrack-ng -w /media/root/rot/wordlists/all.lst -b $AP *.cap

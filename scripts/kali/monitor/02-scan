@@ -1,0 +1,2 @@
+#!/bin/bash
+airodump-ng --band abg wlan1mon;
