@@ -1,0 +1,29 @@
+# /etc/network/interfaces
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+  wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+
+iface default inet dhcp
+
+
+
+# /etc/wpa_supplicant/wpa_supplicant.conf
+
+ctr_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+  scan_ssid=1
+  priority=5
+  ssid=""
+  psk=""
+}
+
+## generate with: wpa_passphrase SSID
