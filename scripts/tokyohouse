@@ -4,17 +4,13 @@
 import requests
 from urllib2 import urlopen, HTTPError
 import re
+import json
+
 
 # from bs4 import BeautifulSoup
 from BeautifulSoup import BeautifulSoup
 
 URL = "https://apartments.gaijinpot.com/en/datasource/property-view"
-
-def is_available(property_id):
-	PARAMS = {'property_id':property_id}
-	r = requests.get(url = URL, params = PARAMS)
-	data = r.json()
-	return data
 
 def write_new_line(file_name, content):
     with open(file_name, "a") as out:
@@ -25,17 +21,33 @@ def get_house_info(url):
 	 try:
 		 response = urlopen(url)
 		 soup = BeautifulSoup(response.read())
-		 price = soup.findAll("strong", {"class": "price"})
-		 return re.findall(r'>(.*)<', str(price[0]))[0]
+		 _price = soup.findAll("strong", {"class": "price"})
+		 price = re.findall(r'>(.*)<', str(_price[0]))[0]
+		 _name1 = soup.findAll("span", {"itemprop": "alternateName"})
+		 name1 = re.findall(r'>(.*)<', str(_name1[0]))[0]
+ 		 _name2 = soup.findAll("span", {"itemprop": "name","class": "text-regular"})
+ 		 name2 = re.findall(r'>(.*)<', str(_name2[0]))[0]
+		 name = str(name1)+" "+str(name2)
+		 return name, price
 	 except HTTPError:
 	     return false
 
-for i in range(630600,630603):
-	if (is_available(i)["success"]):
-		_url = "https://apartments.gaijinpot.com/en/rent/view/"+str(i)
-		_price = get_house_info(_url)
-		print _url
-		print str(i)+": "+str(_price)+" - "
-		print ""
-	else:
-		print str(i)+": no"
+for i in range(630401,630403):
+	_url = "https://apartments.gaijinpot.com/en/rent/view/"+str(i)
+	try:
+		name, price = get_house_info(_url)
+		dataset = {
+		'url': _url,
+		'name': name,
+		'price': price
+		}
+		print json.dumps(dataset, indent = 4, ensure_ascii=False),
+		print ",\n"
+	except:
+		dataset = {
+		'url': _url,
+		'name': "",
+		'price': ""
+		}
+		print json.dumps(dataset, indent = 4, ensure_ascii=False),
+		print ",\n"
