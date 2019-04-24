@@ -1,0 +1,41 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import requests
+from urllib2 import urlopen, HTTPError
+import re
+
+# from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+
+URL = "https://apartments.gaijinpot.com/en/datasource/property-view"
+
+def is_available(property_id):
+	PARAMS = {'property_id':property_id}
+	r = requests.get(url = URL, params = PARAMS)
+	data = r.json()
+	return data
+
+def write_new_line(file_name, content):
+    with open(file_name, "a") as out:
+        out.write("\n")
+        out.write(content)
+
+def get_house_info(url):
+	 try:
+		 response = urlopen(url)
+		 soup = BeautifulSoup(response.read())
+		 price = soup.findAll("strong", {"class": "price"})
+		 return re.findall(r'>(.*)<', str(price[0]))[0]
+	 except HTTPError:
+	     return false
+
+for i in range(630600,630603):
+	if (is_available(i)["success"]):
+		_url = "https://apartments.gaijinpot.com/en/rent/view/"+str(i)
+		_price = get_house_info(_url)
+		print _url
+		print str(i)+": "+str(_price)+" - "
+		print ""
+	else:
+		print str(i)+": no"
