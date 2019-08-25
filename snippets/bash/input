@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Enter a number: "
+read VAR;
+if [[ $VAR -gt 10 ]]; then
+  echo "Variable is greater than 10."
+elif [[ $VAR -lt 10 ]]; then
+  echo "Variable is less than 10."
+elif [[ $VAR -eq 10 ]]; then
+  echo "Variable is exacly 10."
+fi

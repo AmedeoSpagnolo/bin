@@ -1,6 +1,6 @@
 #!/bin/bash
 
-address="amedeo@explab.com"
+address="amedeo.spagnolo@gmail.com"
 message="this is the message"
 subject="this is the sunject"
 
