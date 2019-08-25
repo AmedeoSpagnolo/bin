@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aircrack-ng --simd=avx $1 # -w wordlist

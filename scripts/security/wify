@@ -1,0 +1,3 @@
+#/bin/bash
+SCRIPTPATH=$(dirname $0)
+cat $SCRIPTPATH/wify.txt

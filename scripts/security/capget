@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+  echo "choose interface"
+  echo "sudo tcpdump -I -U -vvv -w handshake.cap -i en0"
+else
+  sudo tcpdump -I -U -vvv -i $1 -w handshake.cap
+fi
