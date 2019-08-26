@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+
 import os
 import sys
 from textblob.classifiers import NaiveBayesClassifier
@@ -16,11 +17,11 @@ def training_from_file():
 def analize(sent):
 	result = cl.classify(sent)
 	percent = int(cl.prob_classify(sent).prob(result)*100)
-	print "%s%% %s - '%s'" % (percent, result, sent)
+	print ("%s%% %s - '%s'" % (percent, result, sent))
 
 if len(sys.argv) > 1:
 	training_from_file()
 	analize(sys.argv[1])
 else:
-	print "ERROR missing argv!"
-	print "usage: python sentiment.py <sentence>"
+	print ("ERROR missing argv!")
+	print ("usage: python sentiment.py <sentence>")
