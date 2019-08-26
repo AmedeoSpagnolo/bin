@@ -1,3 +1,0 @@
-#!/bin/bash
-set theContent to ""
-osascript -e 'tell application "Microsoft Outlook"' -e 'set newMessage to make new outgoing message with properties {subject:"_"}' -e 'make new recipient at newMessage with properties {email address:{name:"noname" ,address:"amedeo@explab.com"}}' -e 'open newMessage' -e 'set plain text content of newMessage to "this is the content"' -e 'send newMessage' -e 'end tell'

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+address="amedeo.spagnolo@gmail.com"
+message="this is the message"
+subject="this is the sunject"
+
+echo "tell application \"Mail\"
+    set theEmail to make new outgoing message with properties {visible:true, subject:\"${subject}\", content:\"${message}\"}
+    tell theEmail
+        make new recipient at end of to recipients with properties {address:\"${address}\"}
+        send theEmail
+    end tell
+end tell" | osascript

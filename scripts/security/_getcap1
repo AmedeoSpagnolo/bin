@@ -1,0 +1,4 @@
+#!/bin/bash
+export BSSID='30F772B6EA82'
+export CHANNEL=11
+sudo tcpdump "type mgt subtype beacon and ether src $BSSID" -I -c 1 -i en0 -w beacon.cap

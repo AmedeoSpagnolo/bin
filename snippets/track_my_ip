@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "$(date) $(getip) $(ipub)"
-# echo "$(date) $(getip) $(ipub)" >> ~/my_ip_logs
