@@ -1,0 +1,8 @@
+void drawImage(PImage img, float x, float y, float r, float w, float h){
+  translate(x,y);
+  rotate(PI/180*r);
+  image(img,-img.width/2,-img.height/2);
+  img.resize(int(w),int(h));
+  rotate(-PI/180*r);
+  translate(-x,-y);
+}
