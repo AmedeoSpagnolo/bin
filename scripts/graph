@@ -1,0 +1,26 @@
+#!/usr/bin/python
+
+import matplotlib.pyplot as plt
+import random
+import sys
+import csv
+import numpy
+
+def read_csv(file_name):
+    with open(file_name, "r") as f:
+        reader = csv.DictReader(f)
+        fields = [name.strip() for name in reader.fieldnames]
+        dataset = list(reader)
+        return dataset, fields
+
+data, fields = read_csv(sys.argv[1])
+print "fields: %s" % fields
+print "data[0]: %s" % data[0]
+
+X=[float(x["X"]) for x in data]
+Y=[float(y["Y"]) for y in data]
+MAX_X = maxValue = numpy.amax(X)
+MAX_Y = maxValue = numpy.amax(Y)
+plt.plot(X,Y,color='red',marker='o',markersize=6,linestyle='None', markeredgecolor='None')
+plt.axis([0, MAX_X, 0, MAX_Y])
+plt.show()
