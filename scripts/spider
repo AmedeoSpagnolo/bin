@@ -108,4 +108,11 @@ def run_example_3():
 	spider.get_att('.//img', 'src')
 	sleep(3)
 
-run_example_2()
+def run_example_4():
+	spider = Spider()
+	spider.start_driver()
+	spider.get_page("https://www.rental819.com/english/")
+	spider.click_element('.//*[@id="searchbtn"]')
+	sleep(3)
+
+run_example_4()

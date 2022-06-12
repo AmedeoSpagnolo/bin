@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+import sys
+import csv
+
+# Illustration width
+px = float(sys.argv[1])
+
+# Illustration height
+py = float(sys.argv[2])
+
+# Marker width
+marker = float(sys.argv[3])
+
+# Marker's shift X from the left edge
+sx = float(sys.argv[4])
+
+# Marker's shift Y from the bottom edge
+sy = float(sys.argv[5])
+
+scale1 = round(px/marker,3)
+scale2 = round(py/marker,3)
+scale3 = 1
+scale = "scale='%s %s %s'" % (scale1, scale2, scale3)
+
+pos1 = round((px/2-sx-marker/2)/marker,3)
+pos2 = 0
+pos3 = round(-(py/2-sy-marker/2)/marker,3)
+pos = "position='%s %s %s'" % (pos1, pos2, pos3)
+
+print ("%s %s" % (scale, pos))
+
+# example: gemini 384.558 278.754 30.372 7.547 7.547

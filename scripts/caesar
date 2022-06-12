@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+
+text = sys.argv[1]
+shift = int(sys.argv[2])
+
+def encrypt(text,s):
+    result = ""
+    # transverse the plain text
+    for i in range(len(text)):
+      char = text[i]
+      # Encrypt uppercase characters in plain text
+
+      if (char.isupper()):
+         result += chr((ord(char) + s-65) % 26 + 65)
+      # Encrypt lowercase characters in plain text
+      else:
+         result += chr((ord(char) + s - 97) % 26 + 97)
+    return result
+
+print(text)
+print(shift)
+print(encrypt(text,shift))
+#check the above function
+# text = "CEASER CIPHER DEMO"
+# s = 4
+#
+# print "Plain Text : " + text
+# print "Shift pattern : " + str(s)
+# print "Cipher: " + encrypt(text,s)
