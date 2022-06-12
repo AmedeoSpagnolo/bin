@@ -1,0 +1,23 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import requests
+from BeautifulSoup import BeautifulSoup
+from urllib2 import urlopen, HTTPError
+import re
+import json
+import sys
+
+
+URL = sys.argv[1]
+CLASS = sys.argv[2]
+
+def getClassFromUrl(_url,_class):
+    try:
+        response = urlopen(_url)
+        soup = BeautifulSoup(response.read())
+        return soup.findAll("", {"class": _class})
+    except HTTPError:
+        return false
+
+print getClassFromUrl(URL,CLASS)

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo $1
+
+mkdir ./temp_pngs
+ffmpeg -i $1 -r 10 ./temp_pngs/out%04d.png
+
+mkdir ./temp_gifs
+sips -s format gif ./temp_pngs/*.png --out ./temp_gifs
+
+
+cd ./temp_gifs
+gifsicle --optimize=3  --colors=256 --delay=10 --loopcount *.gif > ../animation.gif
+
+cd ../
+rm -rf temp_pngs/
+rm -rf temp_gifs/
