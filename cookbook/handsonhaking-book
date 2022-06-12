@@ -1,0 +1,24 @@
+# check integrity of the file downloaded
+sha256sum [FILE_TO_DOWNLOAD] > s1
+sha256sum [FILE_DOWNLOADED] > s2
+dist s1 s2
+
+# check ip and connection
+ip address
+
+# hypervisor escapes or cloudbursts
+can cause program code executing in a virtual machine to run in the host computer.
+
+OSINT
+googl-mail.py
+/etc/passwd root:x:0:0:root:/root:/bin/bash
+root:
+
+$6$y1ZzUr8loevirw5.$/iSAZEuoK7zLkvwBAgO6iocNacVNlDNZYivQCM3My3pX0bh.dgBPFjx/fa8d/Fu9I3sMD2WM7hkdMPalzT4CP0
+
+ssh root@192.168.11.14
+
+https://www.exploit-db.com/google-hacking-database
+
+# Have I been pwned?
+https://haveibeenpwned.com/
